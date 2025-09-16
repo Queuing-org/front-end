@@ -1,6 +1,7 @@
 export const DummyRooms = [
   {
     id: "r1",
+    code: "E24QC45",
     title: "카페 BGM",
     hostNickname: "aryu_1217",
     isPrivate: false,
@@ -17,6 +18,7 @@ export const DummyRooms = [
   },
   {
     id: "r2",
+    code: "V24RC28",
     title: "헬스장 근손실방지",
     hostNickname: "큐돌이",
     isPrivate: true,
@@ -33,6 +35,7 @@ export const DummyRooms = [
   },
   {
     id: "r3",
+    code: "L54MY93",
     title: "잔잔한 공부방",
     hostNickname: "Dj1212",
     isPrivate: false,

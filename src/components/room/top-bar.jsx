@@ -46,53 +46,6 @@ export default function TopBar({
     } catch {}
   }
 
-  // 1) 명시적 나가기 버튼
-  const leaveNow = useCallback(async () => {
-    try {
-      await fetch("/api/rooms/leave", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-        keepalive: true,
-      });
-    } catch {}
-    router.push(exitHref);
-  }, [code, exitHref, router]);
-
-  // 2) 뒤로가기 인터셉트: confirm 후 삭제 → 실제 뒤로가기
-  useEffect(() => {
-    if (!code) return;
-
-    // 이미 가드가 올라가 있으면 다시 pushState 하지 않음
-    if (!history.state || !history.state._guard) {
-      history.pushState({ _guard: true }, "", location.href);
-    }
-
-    const onPopState = async () => {
-      const ok = window.confirm("방에서 나가시겠습니까?");
-      if (!ok) {
-        // 취소 시 가드를 다시 복구
-        if (!history.state || !history.state._guard) {
-          history.pushState({ _guard: true }, "", location.href);
-        }
-        return;
-      }
-      try {
-        await fetch("/api/rooms/leave", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code }),
-          keepalive: true,
-        });
-      } catch {}
-      // 가드가 1개만 존재하므로 한 번만 back
-      router.back();
-    };
-
-    window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
-  }, [code, router]);
-
   return (
     <header className="sticky top-0 z-20 w-full bg-white/90 backdrop-blur border-b border-gray-200">
       <div className="mx-auto flex h-14 items-center justify-between px-4">
@@ -100,7 +53,7 @@ export default function TopBar({
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={() => history.back()} // 브라우저 뒤로가기 트리거 → 위 popstate 로직이 인터셉트
+            onClick={() => history.back()}
             aria-label="뒤로가기"
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 cursor-pointer"
           >
@@ -173,7 +126,7 @@ export default function TopBar({
           {/* 나가기 버튼 (즉시 삭제 후 지정 경로 이동) */}
           <button
             type="button"
-            onClick={leaveNow}
+            onClick={() => router.back()}
             title="나가기"
             aria-label="나가기"
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white hover:bg-gray-50 cursor-pointer"

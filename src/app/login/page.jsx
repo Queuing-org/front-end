@@ -46,6 +46,7 @@ export default function Page() {
           <button
             type="submit"
             disabled={loading}
+            onClick={() => router.push("/main")}
             className="rounded-b-4xl border border-t-0 border-gray-300 bg-[#242424] px-3 py-2 text-[#FDFDFD] hover:bg-black transition cursor-pointer disabled:opacity-60"
           >
             {loading ? "시작 중..." : "닉네임으로 시작하기"}

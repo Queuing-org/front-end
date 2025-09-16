@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 export default function CreateNicknamePage() {
   const router = useRouter();
+
   const [nickname, setNickname] = useState("");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");

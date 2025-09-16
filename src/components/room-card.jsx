@@ -3,7 +3,6 @@
 
 import { Music2, Users2, Lock } from "lucide-react";
 import { TAG_META, tagClasses, tagLabel } from "@/constants/tags";
-import { joinRoom } from "@/lib/joinRoom";
 import { useRouter } from "next/navigation";
 
 // 레이블/변형값을 TAG_META의 정식 키로 정규화
@@ -43,7 +42,7 @@ function normalizeTagKey(input) {
   return alias[canonical] ?? null;
 }
 
-export default function RoomCard({ room, onJoin }) {
+export default function RoomCard({ room }) {
   const router = useRouter();
 
   const {
@@ -72,25 +71,6 @@ export default function RoomCard({ room, onJoin }) {
         ((nowPlaying.positionMs ?? 0) / (nowPlaying.durationSec * 1000)) * 100
       )
     : 0;
-
-  // 내부 입장 로직 (항상 실행)
-  const handleJoin = async (r) => {
-    try {
-      let password;
-      if (r.isPrivate) {
-        password = window.prompt("비밀번호를 입력하세요") || "";
-      }
-      const data = await joinRoom({ code: r.code ?? code, password });
-      // 성공 시 이동
-      if (data?.room?.code) {
-        router.push(`/room/${data.room.code}`);
-      }
-      return data; // onJoin 콜백에서 쓰게 반환
-    } catch (e) {
-      alert(e.message || "입장에 실패했어요.");
-      return null;
-    }
-  };
 
   return (
     <div
@@ -177,16 +157,10 @@ export default function RoomCard({ room, onJoin }) {
           </div>
 
           <button
-            onClick={async () => {
-              if (isFull) return;
-              const result = await handleJoin(room); // ← 항상 내부 join 실행
-              if (result && typeof onJoin === "function") {
-                onJoin(result); // 선택: 부모에서 후속처리 할 수 있게 콜백
-              }
-            }}
+            onClick={() => router.push(`/room/${code}`)}
             disabled={isFull && !isUnlimited}
             className={[
-              "rounded-full px-4 py-1.5 text-xs font-medium transition focus:outline-none",
+              "rounded-full px-4 py-1.5 text-xs font-medium transition focus:outline-none cursor-pointer",
               "focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#17171B]/30",
               isFull && !isUnlimited
                 ? "bg-gray-200 text-gray-500 cursor-not-allowed"

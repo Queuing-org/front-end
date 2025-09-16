@@ -1,10 +1,8 @@
 // src/dummy-users.js
 
-/** 회색 기본 아바타 이미지 URL (원형으로 잘라 써요) */
 export const DEFAULT_GRAY_AVATAR =
   "https://placehold.co/64x64/DEDEDE/DEDEDE.png?text=%20";
 
-/** UI 목업용 더미 참가자 데이터 */
 export const DUMMY_PARTICIPANTS = [
   { id: "user1", nickname: "DJ-Host", avatarUrl: DEFAULT_GRAY_AVATAR },
   { id: "user2", nickname: "cafe-latte", avatarUrl: DEFAULT_GRAY_AVATAR },
