@@ -1,16 +1,16 @@
 // src/components/header.jsx
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Power } from "lucide-react";
 import { useRouter } from "next/navigation";
-import SearchBar from "./topbar/search-bar.tsx";
+import SearchBar from "./topbar/search-bar";
 import Image from "next/image";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
-  const wrapRef = useRef(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
 
   const router = useRouter();
   const nickname = "하드코딩닉네임";
@@ -46,7 +46,7 @@ export default function Header() {
               className="flex items-center gap-2 px-2.5 py-1 rounded-full text-lg font-semibold text-gray-800 cursor-pointer transition-colors hover:bg-gray-100"
             >
               {/* 하드코딩 아바타 */}
-              <img
+              <Image
                 src={`/default-avatar.jpg`}
                 alt="내 아바타"
                 className="h-8 w-8 rounded-full object-cover ring-1 ring-black/5"
