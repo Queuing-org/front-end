@@ -49,6 +49,8 @@ export default function Header() {
               <Image
                 src={`/default-avatar.jpg`}
                 alt="내 아바타"
+                width={32}
+                height={32}
                 className="h-8 w-8 rounded-full object-cover ring-1 ring-black/5"
                 draggable={false}
               />

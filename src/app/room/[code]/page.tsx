@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { currentVideoIdAtom } from "@/atoms/player";
 import QueueList from "@/components/room/queue/queue-list";
@@ -11,20 +11,23 @@ import AddSongModal from "@/components/room/queue/add-song-modal";
 import { useParams } from "next/navigation";
 import { DummyRooms } from "@/dummy-rooms";
 import { DUMMY_PARTICIPANTS } from "@/dummy-users";
+import type { User } from "@/types/user";
+import type { Room } from "@/types/room";
 
-export default function Room({ params }) {
-  const { code } = useParams();
+export default function RoomPage() {
+  const params = useParams<{ code: string }>();
+  const code = params?.code;
 
-  const users = DUMMY_PARTICIPANTS;
+  const users: User[] = DUMMY_PARTICIPANTS;
 
   const [openAdd, setOpenAdd] = useState(false);
   const [videoId] = useAtom(currentVideoIdAtom);
 
-  const [room, setRoom] = useState(null);
-  const [memberCount, setMemberCount] = useState(0);
-  const [participants, setParticipants] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState("");
+  const [room, setRoom] = useState<Room | null>(null);
+  const [memberCount, setMemberCount] = useState<number>(0);
+  const [participants, setParticipants] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [err, setErr] = useState<string>("");
 
   useEffect(() => {
     if (!code) return;
@@ -44,7 +47,7 @@ export default function Room({ params }) {
       <TopBar
         title={room?.title ?? "방제목"}
         currentListeners={memberCount}
-        maxListeners={room?.max_listeners ?? 0}
+        maxListeners={room?.limitedListeners ?? 0}
         exitHref="/main"
       />
 

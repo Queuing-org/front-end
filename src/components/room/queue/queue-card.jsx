@@ -2,6 +2,7 @@
 "use client";
 
 import { fmtDuration } from "@/dummy-queue-songs";
+import Image from "next/image";
 
 export default function QueueCard({ track, index, showThumbnail = true }) {
   return (
@@ -14,7 +15,7 @@ export default function QueueCard({ track, index, showThumbnail = true }) {
 
         {/* 썸네일(옵션) */}
         {showThumbnail && (
-          <img
+          <Image
             src={track.thumbnailUrl}
             alt=""
             width={64}

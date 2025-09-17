@@ -7,24 +7,32 @@ import QueueCard from "./queue-card";
 import { ListMusic, PlusCircle, Settings2 } from "lucide-react";
 import AddSongModal from "@/components/room/queue/add-song-modal";
 import MyQueueManageModal from "@/components/room/queue/my-queue-manage-modal";
+//import type { Track } from "@/types/track";
+
+type QueueListProps = {
+  showThumbnail?: boolean;
+  onOpenMyQueue?: () => void;
+  onOpenAddSong?: () => void;
+  onOpenRoomQueueManage?: () => void;
+};
 
 export default function QueueList({
   showThumbnail = true,
   onOpenMyQueue,
   onOpenAddSong,
   onOpenRoomQueueManage,
-}) {
-  const items = useAtomValue(myQueueAtom); // ✅ atom을 단일 소스로 사용
+}: QueueListProps) {
+  const items = useAtomValue(myQueueAtom); // Track[] 타입
   const [openAdd, setOpenAdd] = useState(false);
   const [openMyQueue, setOpenMyQueue] = useState(false);
 
   const handleOpenAdd = () => {
-    if (typeof onOpenAddSong === "function") onOpenAddSong();
+    if (onOpenAddSong) onOpenAddSong();
     else setOpenAdd(true);
   };
 
   const handleOpenMyQueue = () => {
-    if (typeof onOpenMyQueue === "function") onOpenMyQueue();
+    if (onOpenMyQueue) onOpenMyQueue();
     else setOpenMyQueue(true);
   };
 
