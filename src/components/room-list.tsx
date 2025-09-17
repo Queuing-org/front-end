@@ -1,6 +1,4 @@
 // components/room-list.jsx
-"use client";
-
 import RoomCard from "./room-card";
 import { DummyRooms } from "../dummy-rooms";
 import { Room } from "@/types/room";

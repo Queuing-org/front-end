@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Power } from "lucide-react";
 import { useRouter } from "next/navigation";
-import SearchBar from "./topbar/search-bar";
+import SearchBar from "./topbar/search-bar.tsx";
 import Image from "next/image";
 
 export default function Header() {

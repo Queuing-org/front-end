@@ -51,8 +51,7 @@ export default function RoomCard({ room }) {
     isPrivate = false,
     tags = [],
     listenersCount = 0,
-    capacity,
-    isUnlimited = false,
+    limitedListeners,
     nowPlaying,
     code, // joinRoom에 필요
   } = room;
@@ -61,9 +60,7 @@ export default function RoomCard({ room }) {
     ? tags.map(normalizeTagKey).filter(Boolean)
     : [];
 
-  const cap = isUnlimited ? Infinity : capacity ?? 8;
-  const isFull = !isUnlimited && listenersCount >= cap;
-  const capDisplay = isUnlimited ? "∞" : cap;
+  const isFull = listenersCount == limitedListeners;
 
   const progress = nowPlaying?.durationSec
     ? Math.min(
@@ -147,9 +144,9 @@ export default function RoomCard({ room }) {
                 isFull ? "text-rose-700 font-semibold" : "text-gray-800"
               }`}
             >
-              {listenersCount} / {capDisplay} 명
+              {listenersCount} / {limitedListeners} 명
             </span>
-            {isFull && !isUnlimited && (
+            {isFull && (
               <span className="ml-2 rounded-full bg-rose-50 px-2 py-0.5 text-xs text-rose-700 ring-1 ring-rose-200">
                 가득참
               </span>
@@ -158,11 +155,11 @@ export default function RoomCard({ room }) {
 
           <button
             onClick={() => router.push(`/room/${code}`)}
-            disabled={isFull && !isUnlimited}
+            disabled={isFull}
             className={[
               "rounded-full px-4 py-1.5 text-xs font-medium transition focus:outline-none cursor-pointer",
               "focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#17171B]/30",
-              isFull && !isUnlimited
+              isFull
                 ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                 : "bg-[#17171B] text-white hover:opacity-90",
             ].join(" ")}
