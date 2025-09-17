@@ -1,8 +1,9 @@
 import "./globals.css";
-import Providers from "./providers"; // ← React Query Provider
+import Providers from "./providers"; // React Query Provider
 import localFont from "next/font/local";
 import { Jua } from "next/font/google";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import type { ReactNode } from "react";
 
 const jua = Jua({
   weight: ["400"],
@@ -19,12 +20,13 @@ const hand = localFont({
   display: "swap",
 });
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko" className={`${jua.variable} ${hand.variable}`}>
       <body className="bg-[#FFFFFF] h-screen">
         <Providers>
-          {children} <ReactQueryDevtools />
+          {children}
+          <ReactQueryDevtools />
         </Providers>
       </body>
     </html>
