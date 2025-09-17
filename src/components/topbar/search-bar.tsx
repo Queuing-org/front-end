@@ -5,7 +5,7 @@ import { Search, X } from "lucide-react";
 import { useState } from "react";
 
 export default function SearchBar() {
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState<string>("");
 
   return (
     <div className="w-full">
