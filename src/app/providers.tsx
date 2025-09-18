@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools"; // 원하면 활성화
 
-export default function Providers({ children }) {
+type ProvidersProps = { children: ReactNode };
+
+export default function Providers({ children }: ProvidersProps) {
   const [client] = useState(
     () =>
       new QueryClient({
