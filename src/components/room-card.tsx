@@ -1,28 +1,61 @@
-// components/room-card.jsx
 "use client";
 
 import { Music2, Users2, Lock } from "lucide-react";
 import { TAG_META, tagClasses, tagLabel } from "@/constants/tags";
 import { useRouter } from "next/navigation";
 
-// 레이블/변형값을 TAG_META의 정식 키로 정규화
-function normalizeTagKey(input) {
-  if (!input) return null;
+// ── 타입들 ────────────────────────────────────────────────────────────────
+type NowPlaying = {
+  title: string;
+  artist: string;
+  durationSec: number;
+  positionMs?: number;
+};
+
+type TagInput =
+  | string
+  | {
+      key?: string;
+      tag?: string;
+      value?: string;
+    };
+
+type RoomLike = {
+  title: string;
+  hostNickname: string;
+  isPrivate?: boolean;
+  tags?: TagInput[];
+  listenersCount?: number;
+  limitedListeners?: number | null;
+  nowPlaying?: NowPlaying | null;
+  code: string;
+};
+
+// ── 레이블/변형값을 TAG_META의 정식 키로 정규화 ───────────────────────────
+function normalizeTagKey(input: unknown): string | null {
+  if (input == null) return null;
+
   const raw =
     typeof input === "string"
       ? input
-      : input.key ?? input.tag ?? input.value ?? "";
+      : (input as any).key ?? (input as any).tag ?? (input as any).value ?? "";
+
   const s = String(raw).trim();
   if (!s) return null;
 
-  if (Object.prototype.hasOwnProperty.call(TAG_META, s)) return s;
+  // 이미 키면 통과
+  if (Object.prototype.hasOwnProperty.call(TAG_META as object, s)) return s;
 
   const lower = s.toLowerCase();
-  for (const k of Object.keys(TAG_META)) {
-    if (String(tagLabel(k)).toLowerCase() === lower) return k;
+
+  // 라벨(표시값)과 대소문자만 다른 경우 매칭
+  for (const k of Object.keys(TAG_META as object)) {
+    if (String(tagLabel(k as any)).toLowerCase() === lower) return k;
   }
+
+  // 하이픈/공백 제거 등 캐노니컬라이즈 후 별칭 매핑
   const canonical = lower.replace(/[\s-]/g, "");
-  const alias = {
+  const alias: Record<string, string> = {
     kpop: "kpop",
     "k-pop": "kpop",
     jpop: "jpop",
@@ -42,7 +75,8 @@ function normalizeTagKey(input) {
   return alias[canonical] ?? null;
 }
 
-export default function RoomCard({ room }) {
+// ── 컴포넌트 ─────────────────────────────────────────────────────────────
+export default function RoomCard({ room }: { room: RoomLike }) {
   const router = useRouter();
 
   const {
@@ -53,14 +87,19 @@ export default function RoomCard({ room }) {
     listenersCount = 0,
     limitedListeners,
     nowPlaying,
-    code, // joinRoom에 필요
+    code,
   } = room;
 
   const normalizedTags = Array.isArray(tags)
-    ? tags.map(normalizeTagKey).filter(Boolean)
+    ? (tags
+        .map((t) => normalizeTagKey(t))
+        .filter((k): k is string => Boolean(k)) as string[])
     : [];
 
-  const isFull = listenersCount == limitedListeners;
+  const isFull =
+    typeof limitedListeners === "number" &&
+    limitedListeners > 0 &&
+    listenersCount >= limitedListeners;
 
   const progress = nowPlaying?.durationSec
     ? Math.min(
@@ -70,12 +109,7 @@ export default function RoomCard({ room }) {
     : 0;
 
   return (
-    <div
-      className="
-        rounded-2xl bg-white ring-1 ring-gray-200 shadow-sm
-        transition hover:shadow-md hover:ring-[#17171B]/25
-      "
-    >
+    <div className="rounded-2xl bg-white ring-1 ring-gray-200 shadow-sm transition hover:shadow-md hover:ring-[#17171B]/25">
       <div className="p-4">
         {/* 헤더 */}
         <div className="flex items-center justify-between gap-2">
@@ -96,7 +130,7 @@ export default function RoomCard({ room }) {
           <span className="font-medium text-gray-700">{hostNickname}</span>
         </p>
 
-        {/* 현재 재생 (기존 박스 UI 유지) */}
+        {/* 현재 재생 */}
         {nowPlaying && (
           <div className="mt-3 rounded-xl bg-gray-50 p-3 ring-1 ring-gray-100">
             <div className="flex items-center gap-2 text-sm text-gray-800">
@@ -122,7 +156,7 @@ export default function RoomCard({ room }) {
             {normalizedTags.map((k) => (
               <span
                 key={k}
-                className={`rounded-full px-2 py-0.5 text-xs  ${tagClasses(k)}`}
+                className={`rounded-full px-2 py-0.5 text-xs ${tagClasses(k)}`}
                 title={tagLabel(k)}
               >
                 {tagLabel(k)}
@@ -144,7 +178,11 @@ export default function RoomCard({ room }) {
                 isFull ? "text-rose-700 font-semibold" : "text-gray-800"
               }`}
             >
-              {listenersCount} / {limitedListeners} 명
+              {listenersCount}
+              {typeof limitedListeners === "number"
+                ? ` / ${limitedListeners}`
+                : ""}{" "}
+              명
             </span>
             {isFull && (
               <span className="ml-2 rounded-full bg-rose-50 px-2 py-0.5 text-xs text-rose-700 ring-1 ring-rose-200">
