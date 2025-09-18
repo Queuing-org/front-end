@@ -1,30 +1,43 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
 export default function Page() {
-  const [nickname, setNickname] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
+  const [nickname, setNickname] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [err, setErr] = useState<string>("");
 
   const router = useRouter();
 
   const nicknameRegex = /^[가-힣a-zA-Z0-9_-]{1,8}$/;
-  const validateNickname = (v) =>
+
+  // v: string, 반환: string | null
+  const validateNickname = (v: string): string | null =>
     nicknameRegex.test(v)
       ? null
       : "닉네임은 한글/영문/숫자/_/-만 사용 가능하며 1~8자여야 합니다.";
 
-  async function onSubmit(e) {
+  // e: FormEvent<HTMLFormElement>
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErr("");
 
     const value = nickname.trim();
     if (!value) return setErr("닉네임을 입력해 주세요.");
+
     const vErr = validateNickname(value);
     if (vErr) return setErr(vErr);
+
+    setLoading(true);
+    // TODO: 서버 저장/쿠키 설정 등 필요한 작업
+    router.push("/main");
   }
+
+  // e: ChangeEvent<HTMLInputElement>
+  const onChangeNickname = (e: ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value);
+  };
 
   return (
     <div className="bg-[#FDFDFD] h-screen flex flex-col justify-center items-center text-[#242424]">
@@ -39,14 +52,13 @@ export default function Page() {
             name="nickname"
             placeholder="ex) 큐돌이17"
             value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
+            onChange={onChangeNickname}
             disabled={loading}
             className="rounded-t-4xl border border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-gray-200 text-center"
           />
           <button
             type="submit"
             disabled={loading}
-            onClick={() => router.push("/main")}
             className="rounded-b-4xl border border-t-0 border-gray-300 bg-[#242424] px-3 py-2 text-[#FDFDFD] hover:bg-black transition cursor-pointer disabled:opacity-60"
           >
             {loading ? "시작 중..." : "닉네임으로 시작하기"}
@@ -66,6 +78,7 @@ export default function Page() {
           className="w-full inline-flex items-center justify-center gap-2 rounded-3xl border border-gray-300 bg-white py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition cursor-pointer"
           onClick={() => router.push("/main")}
         >
+          {/* 구글 로그인 버튼 (임시) */}
           <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
             <path
               fill="#EA4335"
