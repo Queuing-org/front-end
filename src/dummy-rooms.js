@@ -7,7 +7,7 @@ export const DummyRooms = [
     isPrivate: false,
     tags: ["Chill", "K-POP"],
     listenersCount: 8, // 현재 인원
-    capacity: 8, // 기본 무료 플랜: 8명
+    limitedListeners: 8,
     isUnlimited: false, // 유료 플랜이면 true
     nowPlaying: {
       title: "Love Dive",
@@ -24,8 +24,7 @@ export const DummyRooms = [
     isPrivate: true,
     tags: ["EDM", "Pump"],
     listenersCount: 5,
-    capacity: 8,
-    isUnlimited: false,
+    limitedListeners: 8,
     nowPlaying: {
       title: "The Nights",
       artist: "Avicii",
@@ -41,8 +40,7 @@ export const DummyRooms = [
     isPrivate: false,
     tags: ["Lo-Fi", "Study"],
     listenersCount: 52,
-    capacity: null, // null이거나 값 없음 → 무제한 처리
-    isUnlimited: true, // 유료 플랜
+    limitedListeners: 200,
     nowPlaying: {
       title: "lofi hip hop beats",
       artist: "Nujabes",

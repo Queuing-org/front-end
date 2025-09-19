@@ -1,4 +1,4 @@
-// src/components/topbar/create-room.jsx
+// src/components/topbar/create-room.tsx
 "use client";
 
 import { useState, useMemo } from "react";
@@ -15,22 +15,23 @@ const FREE_HARD_CAP = 50;
 const ABSOLUTE_HARD_CAP = 200;
 
 export default function CreateRoom() {
-  const [open, setOpen] = useState(false);
-  const [isPrivate, setIsPrivate] = useState(false);
-  const [title, setTitle] = useState("");
-  const [password, setPassword] = useState("");
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [open, setOpen] = useState<boolean>(false);
+  const [isPrivate, setIsPrivate] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   // ✅ 추가
-  const [maxListeners, setMaxListeners] = useState(25);
+  const [maxListeners, setMaxListeners] = useState<number>(25);
 
-  const [submitting, setSubmitting] = useState(false);
-  const [err, setErr] = useState("");
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [err, setErr] = useState<string>("");
+
   const router = useRouter();
 
   const tags = useMemo(() => Object.keys(TAG_META), []);
 
-  function toggleTag(key) {
+  function toggleTag(key: string) {
     setSelectedTags((prev) => {
       const set = new Set(prev);
       if (set.has(key)) set.delete(key);
@@ -79,7 +80,6 @@ export default function CreateRoom() {
           isPrivate,
           password: isPrivate ? password : undefined,
           tags: selectedTags,
-          // ✅ 추가
           maxListeners: cap,
         }),
       });
@@ -93,7 +93,7 @@ export default function CreateRoom() {
       setMaxListeners(25);
       // 프로젝트 라우트에 맞춰 조정(/room vs /r)
       router.push(`/room/${data.room.code}`);
-    } catch (e) {
+    } catch (e: any) {
       setErr(e.message);
     } finally {
       setSubmitting(false);
@@ -114,9 +114,7 @@ export default function CreateRoom() {
       <Modal open={open} onClose={() => setOpen(false)}>
         <div className="p-5">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-[#17171B]">
-              새 방 만들기
-            </h2>
+            <h2 className="text-lg font-semibold text-[#17171B]">새 방 만들기</h2>
             <button
               className="rounded-full p-1 hover:bg-gray-100 cursor-pointer"
               onClick={() => setOpen(false)}
@@ -129,9 +127,7 @@ export default function CreateRoom() {
           <div className="mt-4 space-y-4">
             {/* 방 이름 */}
             <div>
-              <label className="block text-sm text-gray-600 mb-1">
-                방 이름
-              </label>
+              <label className="block text-sm text-gray-600 mb-1">방 이름</label>
               <input
                 type="text"
                 placeholder="예) 카페 BGM"
@@ -177,7 +173,6 @@ export default function CreateRoom() {
                 </label>
               </div>
 
-              {/* 셀렉트 or 숫자 입력 중 택1 — 셀렉트가 UX 더 안전 */}
               <select
                 className="w-full rounded-xl border border-gray-200 bg-white/80 px-3 py-2 text-sm text-[#17171B] focus:outline-none focus:ring-2 focus:ring-[#17171B]/20"
                 value={maxListeners}
@@ -190,18 +185,6 @@ export default function CreateRoom() {
                   </option>
                 ))}
               </select>
-
-              {/* 숫자 인풋을 쓰고 싶다면 아래 대체:
-              <input
-                type="number"
-                min={2}
-                max={ABSOLUTE_HARD_CAP}
-                step={1}
-                value={maxListeners}
-                onChange={(e) => setMaxListeners(e.target.value)}
-                className="w-full rounded-xl border border-gray-200 bg-white/80 px-3 py-2 text-sm"
-              />
-              */}
             </div>
 
             {/* 태그(옵션) */}

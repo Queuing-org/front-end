@@ -1,22 +1,36 @@
+// src/components/topbar/sort-button.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpDown, Check } from "lucide-react";
 
-const DEFAULT_OPTIONS = ["인기순", "최신순", "인원 많은 순", "인원 적은 순"];
+const DEFAULT_OPTIONS: string[] = [
+  "인기순",
+  "최신순",
+  "인원 많은 순",
+  "인원 적은 순",
+];
 
-export default function SortButton({ options = DEFAULT_OPTIONS }) {
-  const sortRef = useRef(null);
-  const [openSort, setOpenSort] = useState(false);
+interface SortButtonProps {
+  options?: string[];
+}
+
+export default function SortButton({
+  options = DEFAULT_OPTIONS,
+}: SortButtonProps) {
+  const sortRef = useRef<HTMLDivElement | null>(null);
+  const [openSort, setOpenSort] = useState<boolean>(false);
 
   // 바깥 클릭 + ESC 닫기
   useEffect(() => {
-    const onDown = (e) => {
-      if (sortRef.current && !sortRef.current.contains(e.target)) {
+    const onDown = (e: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(e.target as Node)) {
         setOpenSort(false);
       }
     };
-    const onEsc = (e) => e.key === "Escape" && setOpenSort(false);
+    const onEsc = (e: KeyboardEvent) =>
+      e.key === "Escape" && setOpenSort(false);
+
     document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onEsc);
     return () => {

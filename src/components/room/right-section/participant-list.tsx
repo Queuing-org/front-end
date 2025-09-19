@@ -1,6 +1,7 @@
+import { User } from "@/types/user";
 import ParticipantCard from "./participant-card";
 
-export default function ParticipantList({ users = [] }) {
+export default function ParticipantList({ users = [] }: { users: User[] }) {
   return (
     <div className="flex flex-col h-full">
       <div className="mb-1 flex items-center justify-left shrink-0">

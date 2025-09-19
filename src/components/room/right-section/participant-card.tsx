@@ -1,18 +1,27 @@
 "use client";
 
+import { User } from "@/types/user";
 import { Crown } from "lucide-react";
+import Image from "next/image";
+
+type ParticipantCardProps = {
+  user: User;
+  isMeHost?: boolean;
+  onTransferHost?: (userId: string) => void; // 콜백이면 이렇게
+  busy?: boolean;
+};
 
 export default function ParticipantCard({
   user,
   isMeHost = false,
   onTransferHost,
   busy = false,
-}) {
+}: ParticipantCardProps) {
   const showTransfer = isMeHost && !user.isHost; // 내가 방장이고, 대상이 방장이 아닐 때만
 
   return (
     <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-3 py-2">
-      <img
+      <Image
         src={user.avatarUrl || "/default-avatar.jpg"}
         alt=""
         width={32}
@@ -27,7 +36,6 @@ export default function ParticipantCard({
             <Crown
               className="h-4 w-4 shrink-0 text-amber-500"
               aria-label="방장"
-              title="방장"
             />
           )}
         </div>

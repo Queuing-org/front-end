@@ -1,16 +1,20 @@
-// src/components/room/queue/add-song-modal.jsx
+// src/components/room/queue/add-song-modal.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import Modal from "@/components/ui/modal";
 import { useSetAtom } from "jotai";
 import { enqueueOrPlayAtom } from "@/atoms/queue";
 import { Link2, Loader2, X } from "lucide-react";
+import type { Track } from "@/types/track";
 
 const DEFAULT_DURATION_SEC = 180;
-const thumb = (id) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+const thumb = (id: string) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 
-async function getOEmbed(videoId) {
+type OEmbed = { title: string | null; thumbnailUrl: string | null };
+type ResolveResponse = { videoId: string };
+
+async function getOEmbed(videoId: string): Promise<OEmbed> {
   const urls = [
     `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`,
     `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`,
@@ -19,61 +23,79 @@ async function getOEmbed(videoId) {
     try {
       const r = await fetch(u);
       if (!r.ok) continue;
-      const j = await r.json();
+      const j = (await r.json()) as { title?: string; thumbnail_url?: string };
       return {
-        title: j?.title || null,
-        thumbnailUrl: j?.thumbnail_url || null,
+        title: j?.title ?? null,
+        thumbnailUrl: j?.thumbnail_url ?? null,
       };
-    } catch {}
+    } catch {
+      // ignore and try next
+    }
   }
   return { title: null, thumbnailUrl: null };
 }
 
-export default function AddSongModal({ open, onClose }) {
-  const enqueueOrPlay = useSetAtom(enqueueOrPlayAtom);
-  const [url, setUrl] = useState("");
-  const [err, setErr] = useState("");
-  const [loading, setLoading] = useState(false);
+type AddSongModalProps = {
+  open: boolean;
+  onClose?: () => void;
+};
 
-  async function onSubmit(e) {
+export default function AddSongModal({ open, onClose }: AddSongModalProps) {
+  const enqueueOrPlay = useSetAtom(enqueueOrPlayAtom);
+  const [url, setUrl] = useState<string>("");
+  const [err, setErr] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const onChangeUrl = (e: ChangeEvent<HTMLInputElement>) => {
+    setUrl(e.target.value);
+  };
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErr("");
     const value = url.trim();
-    if (!value) return setErr("유튜브 링크를 입력해 주세요.");
+    if (!value) {
+      setErr("유튜브 링크를 입력해 주세요.");
+      return;
+    }
 
     try {
       setLoading(true);
+
       // 1) URL → videoId
       const res = await fetch("/api/yt/resolve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: value }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "링크를 확인해 주세요.");
+      const data = (await res.json()) as Partial<ResolveResponse>;
+      if (!res.ok || !data.videoId) {
+        throw new Error((data as any)?.error || "링크를 확인해 주세요.");
+      }
 
       const videoId = data.videoId;
-      // 2) oEmbed 보강
+
+      // 2) oEmbed 메타 보강
       const meta = await getOEmbed(videoId);
 
-      const track = {
+      // 3) Track 생성 (enqueueOrPlayAtom은 Track.videoId를 사용)
+      const track: Track = {
         id: crypto.randomUUID(),
-        source: "youtube",
-        video_id: videoId,
-        title: meta.title || "(제목 불러오는 중)",
+        videoId,
+        title: meta.title ?? "(제목 불러오는 중)",
         durationSec: DEFAULT_DURATION_SEC,
-        thumbnailUrl: meta.thumbnailUrl || thumb(videoId),
-        status: "queued",
-        created_at: new Date().toISOString(),
+        thumbnailUrl: meta.thumbnailUrl ?? thumb(videoId),
+        // 선택 필드가 있다면 프로젝트 타입에 맞춰 추가
+        addedAt: Date.now(),
       };
 
-      // ✅ 핵심: 여기서만 큐/재생 분기 처리
       enqueueOrPlay(track);
-
       onClose?.();
       setUrl("");
     } catch (e) {
-      setErr(e.message);
+      const message =
+        e instanceof Error ? e.message : "추가 중 오류가 발생했습니다.";
+      setErr(message);
     } finally {
       setLoading(false);
     }
@@ -90,6 +112,7 @@ export default function AddSongModal({ open, onClose }) {
             type="button"
             className="p-1 rounded hover:bg-gray-100"
             onClick={onClose}
+            aria-label="모달 닫기"
           >
             <X className="h-4 w-4" />
           </button>
@@ -105,7 +128,7 @@ export default function AddSongModal({ open, onClose }) {
                 placeholder="https://youtu.be/... 또는 https://www.youtube.com/watch?v=..."
                 className="w-full outline-none text-sm placeholder:text-gray-300 text-[#17171B]"
                 value={url}
-                onChange={(e) => setUrl(e.target.value)}
+                onChange={onChangeUrl}
               />
             </div>
             <button

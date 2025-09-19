@@ -1,9 +1,21 @@
-// src/components/room/queue/QueueCard.jsx
+// src/components/room/queue/QueueCard.tsx
 "use client";
 
 import { fmtDuration } from "@/dummy-queue-songs";
+import Image from "next/image";
+import type { Track } from "@/types/track";
 
-export default function QueueCard({ track, index, showThumbnail = true }) {
+type QueueCardProps = {
+  track: Track;
+  index: number;
+  showThumbnail?: boolean;
+};
+
+export default function QueueCard({
+  track,
+  index,
+  showThumbnail = true,
+}: QueueCardProps) {
   return (
     <div className="flex items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-3 py-2 hover:bg-gray-50">
       <div className="flex min-w-0 items-center gap-2">
@@ -14,7 +26,7 @@ export default function QueueCard({ track, index, showThumbnail = true }) {
 
         {/* 썸네일(옵션) */}
         {showThumbnail && (
-          <img
+          <Image
             src={track.thumbnailUrl}
             alt=""
             width={64}
