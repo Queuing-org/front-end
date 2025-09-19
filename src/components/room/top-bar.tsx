@@ -1,24 +1,32 @@
-// src/components/room/topbar.jsx
+// src/components/room/TopBar.tsx
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ChevronLeft, Copy, Check, QrCode, Users, LogOut } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
+
+type TopBarProps = {
+  title?: string;
+  currentListeners?: number;
+  maxListeners?: number;
+  exitHref?: string;
+};
 
 export default function TopBar({
   title = "방제목",
   currentListeners = 0,
   maxListeners = 0,
   exitHref = "/main",
-}) {
+}: TopBarProps) {
   const router = useRouter();
-  const { code: codeFromUrl } = useParams();
+  const params = useParams<{ code?: string | string[] }>();
+  const codeFromUrl = params?.code;
   const code = Array.isArray(codeFromUrl) ? codeFromUrl[0] : codeFromUrl;
 
   const [copied, setCopied] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
-  const qrRef = useRef(null);
+  const qrRef = useRef<HTMLDivElement>(null);
 
   const shareUrl =
     typeof window !== "undefined"
@@ -26,10 +34,14 @@ export default function TopBar({
       : `https://your.app/room/${code}`;
 
   useEffect(() => {
-    const onDown = (e) => {
-      if (qrRef.current && !qrRef.current.contains(e.target)) setQrOpen(false);
+    const onDown = (e: MouseEvent) => {
+      if (qrRef.current && !qrRef.current.contains(e.target as Node)) {
+        setQrOpen(false);
+      }
     };
-    const onEsc = (e) => e.key === "Escape" && setQrOpen(false);
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setQrOpen(false);
+    };
     document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onEsc);
     return () => {
@@ -43,7 +55,9 @@ export default function TopBar({
       await navigator.clipboard.writeText(String(code || ""));
       setCopied(true);
       setTimeout(() => setCopied(false), 1200);
-    } catch {}
+    } catch {
+      // ignore
+    }
   }
 
   return (
@@ -123,10 +137,10 @@ export default function TopBar({
             )}
           </div>
 
-          {/* 나가기 버튼 (즉시 삭제 후 지정 경로 이동) */}
+          {/* 나가기 버튼 */}
           <button
             type="button"
-            onClick={() => router.back()}
+            onClick={() => router.push(exitHref)}
             title="나가기"
             aria-label="나가기"
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white hover:bg-gray-50 cursor-pointer"

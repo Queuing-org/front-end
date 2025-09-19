@@ -1,13 +1,21 @@
-// src/components/ui/modal.jsx
+// src/components/ui/modal.tsx
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, ReactNode } from "react";
 import { createPortal } from "react-dom";
 
-export default function Modal({ open, onClose, children }) {
+interface ModalProps {
+  open: boolean;
+  onClose?: () => void;
+  children: ReactNode;
+}
+
+export default function Modal({ open, onClose, children }: ModalProps) {
   useEffect(() => {
     if (!open) return;
-    const onEsc = (e) => e.key === "Escape" && onClose?.();
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose?.();
+    };
     document.addEventListener("keydown", onEsc);
     return () => document.removeEventListener("keydown", onEsc);
   }, [open, onClose]);

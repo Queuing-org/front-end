@@ -1,3 +1,4 @@
+// src/components/room/queue/MyQueueManageModal.tsx
 "use client";
 
 import { useAtom } from "jotai";
@@ -5,22 +6,40 @@ import { myQueueAtom } from "@/atoms/queue";
 import Modal from "@/components/ui/modal";
 import { X, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { fmtDuration } from "@/dummy-queue-songs";
+import type { Track } from "@/types/track";
+import Image from "next/image";
 
-export default function MyQueueManageModal({ open, onClose }) {
-  const [items, setItems] = useAtom(myQueueAtom);
+type MyQueueManageModalProps = {
+  open: boolean;
+  onClose: () => void;
+};
 
-  const handleRemove = (id) => {
+export default function MyQueueManageModal({
+  open,
+  onClose,
+}: MyQueueManageModalProps) {
+  const [items, setItems] = useAtom<Track[]>(myQueueAtom);
+
+  const handleRemove = (id: string) => {
     setItems((prev) => (prev ?? []).filter((t) => t.id !== id));
   };
 
-  // TODO: 위/아래 이동 로직 직접 연결(예: setItems로 스왑)
-  const handleMoveUp = (index) => {
-    // e.g., swap index-1 <-> index
-    // setItems((prev) => { ... });
+  const handleMoveUp = (index: number) => {
+    setItems((prev) => {
+      if (!prev || index <= 0) return prev;
+      const next = [...prev];
+      [next[index - 1], next[index]] = [next[index], next[index - 1]];
+      return next;
+    });
   };
-  const handleMoveDown = (index) => {
-    // e.g., swap index <-> index+1
-    // setItems((prev) => { ... });
+
+  const handleMoveDown = (index: number) => {
+    setItems((prev) => {
+      if (!prev || index >= prev.length - 1) return prev;
+      const next = [...prev];
+      [next[index], next[index + 1]] = [next[index + 1], next[index]];
+      return next;
+    });
   };
 
   return (
@@ -57,7 +76,7 @@ export default function MyQueueManageModal({ open, onClose }) {
                     <span className="w-6 shrink-0 text-xs tabular-nums text-gray-500">
                       {i + 1}
                     </span>
-                    <img
+                    <Image
                       src={t.thumbnailUrl}
                       alt=""
                       width={64}
@@ -76,7 +95,6 @@ export default function MyQueueManageModal({ open, onClose }) {
 
                   {/* 컨트롤 영역 */}
                   <div className="ml-2 flex items-center gap-2">
-                    {/* 위/아래 세그먼트 버튼 */}
                     <div
                       role="group"
                       className="inline-flex overflow-hidden rounded-full border border-gray-200 bg-white shadow-sm"
@@ -116,7 +134,7 @@ export default function MyQueueManageModal({ open, onClose }) {
                       </button>
                     </div>
 
-                    {/* 삭제 버튼 (아이콘 라운드) */}
+                    {/* 삭제 버튼 */}
                     <button
                       type="button"
                       onClick={() => handleRemove(t.id)}

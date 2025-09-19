@@ -1,4 +1,4 @@
-// src/components/room/youtube-player.jsx
+// src/components/room/YoutubePlayer.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -6,10 +6,25 @@ import { useSetAtom } from "jotai";
 import { advanceQueueAtom } from "@/atoms/queue";
 import Spinner from "../ui/spinner";
 
-export default function YoutubePlayer({ videoId, autoplay = false }) {
-  const wrapRef = useRef(null);
-  const mountRef = useRef(null);
-  const playerRef = useRef(null);
+type YoutubePlayerProps = {
+  videoId: string | null;
+  autoplay?: boolean;
+};
+
+declare global {
+  interface Window {
+    YT: typeof YT;
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
+export default function YoutubePlayer({
+  videoId,
+  autoplay = false,
+}: YoutubePlayerProps) {
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const mountRef = useRef<HTMLDivElement | null>(null);
+  const playerRef = useRef<YT.Player | null>(null);
   const [currentTitle, setCurrentTitle] = useState("");
   const [apiReady, setApiReady] = useState(false);
   const advanceQueue = useSetAtom(advanceQueueAtom);
@@ -18,7 +33,7 @@ export default function YoutubePlayer({ videoId, autoplay = false }) {
   useEffect(() => {
     let cancelled = false;
     function loadAPI() {
-      return new Promise((resolve) => {
+      return new Promise<typeof YT>((resolve) => {
         if (window.YT?.Player) return resolve(window.YT);
         const prev = window.onYouTubeIframeAPIReady;
         window.onYouTubeIframeAPIReady = function () {
@@ -67,7 +82,6 @@ export default function YoutubePlayer({ videoId, autoplay = false }) {
           } catch {}
         },
         onStateChange: (e) => {
-          const YT = window.YT;
           if (
             e.data === YT.PlayerState.CUED ||
             e.data === YT.PlayerState.PLAYING
@@ -97,7 +111,7 @@ export default function YoutubePlayer({ videoId, autoplay = false }) {
     }
 
     return () => {
-      ro?.disconnect?.();
+      ro.disconnect();
       if (playerRef.current?.destroy) playerRef.current.destroy();
       playerRef.current = null;
     };
