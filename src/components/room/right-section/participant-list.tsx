@@ -5,7 +5,7 @@ export default function ParticipantList({ users = [] }: { users: User[] }) {
   return (
     <div className="flex flex-col h-full">
       <div className="mb-1 flex items-center justify-left shrink-0">
-        <h3 className="text-sm font-semibold text-[#17171B]">참가자</h3>
+        <h3 className="text-sm px-2 font-semibold text-[#17171B]">참가자</h3>
         <span className="text-xs text-gray-500 ml-4">{users.length}명</span>
       </div>
 

@@ -20,7 +20,14 @@ export default function ParticipantCard({
   const showTransfer = isMeHost && !user.isHost; // 내가 방장이고, 대상이 방장이 아닐 때만
 
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-3 py-2">
+    <div
+      className="
+        group flex items-center gap-3 bg-white
+        py-2 px-2 rounded-xl
+        transition-colors duration-200
+        hover:bg-gray-100
+      "
+    >
       <Image
         src={user.avatarUrl || "/default-avatar.jpg"}
         alt=""

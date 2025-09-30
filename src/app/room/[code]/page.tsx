@@ -43,7 +43,7 @@ export default function RoomPage() {
   }, [code]);
 
   return (
-    <div className="bg-white text-[#17171B] min-h-screen flex flex-col">
+    <div className="bg-white text-[#17171B] min-h-screen flex flex-col ">
       <TopBar
         title={room?.title ?? "방제목"}
         currentListeners={memberCount}
@@ -55,6 +55,7 @@ export default function RoomPage() {
         className="flex-1 p-4 grid gap-18 grid-cols-1 justify-center
                   lg:[grid-template-columns:minmax(160px,320px)_720px_minmax(140px,280px)]
                   xl:[grid-template-columns:minmax(200px,340px)_820px_minmax(180px,300px)]
+                  border-b border-gray-200
                   "
       >
         <aside className="order-2 lg:order-1 w-full min-w-0">
