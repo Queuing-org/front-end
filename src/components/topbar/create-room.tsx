@@ -71,33 +71,7 @@ export default function CreateRoom() {
       return;
     }
 
-    try {
-      const res = await fetch("/api/rooms/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: title.trim(),
-          isPrivate,
-          password: isPrivate ? password : undefined,
-          tags: selectedTags,
-          maxListeners: cap,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "방 생성에 실패했습니다.");
-
-      setOpen(false);
-      setTitle("");
-      setPassword("");
-      setSelectedTags([]);
-      setMaxListeners(25);
-      // 프로젝트 라우트에 맞춰 조정(/room vs /r)
-      router.push(`/room/${data.room.code}`);
-    } catch (e: any) {
-      setErr(e.message);
-    } finally {
-      setSubmitting(false);
-    }
+    router.push("/room/R23MP05");
   }
 
   return (
@@ -114,7 +88,9 @@ export default function CreateRoom() {
       <Modal open={open} onClose={() => setOpen(false)}>
         <div className="p-5">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-[#17171B]">새 방 만들기</h2>
+            <h2 className="text-lg font-semibold text-[#17171B]">
+              새 방 만들기
+            </h2>
             <button
               className="rounded-full p-1 hover:bg-gray-100 cursor-pointer"
               onClick={() => setOpen(false)}
@@ -127,7 +103,9 @@ export default function CreateRoom() {
           <div className="mt-4 space-y-4">
             {/* 방 이름 */}
             <div>
-              <label className="block text-sm text-gray-600 mb-1">방 이름</label>
+              <label className="block text-sm text-gray-600 mb-1">
+                방 이름
+              </label>
               <input
                 type="text"
                 placeholder="예) 카페 BGM"
