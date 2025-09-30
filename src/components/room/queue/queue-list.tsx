@@ -55,7 +55,7 @@ export default function QueueList({
       </div>
 
       {/* 리스트 */}
-      <div className="flex-1 overflow-y-auto max-h-[350px] pr-1">
+      <div className="flex-1 overflow-y-auto max-h-[410px] pr-1">
         {items.map((t, i) => (
           <QueueCard
             key={t.id}

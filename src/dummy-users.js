@@ -46,4 +46,34 @@ export const DUMMY_PARTICIPANTS = [
     avatarUrl: DEFAULT_GRAY_AVATAR,
     isHost: false,
   },
+  {
+    id: "user8",
+    nickname: "night-owl2",
+    avatarUrl: DEFAULT_GRAY_AVATAR,
+    isHost: false,
+  },
+  {
+    id: "user9",
+    nickname: "night-owl3",
+    avatarUrl: DEFAULT_GRAY_AVATAR,
+    isHost: false,
+  },
+  {
+    id: "user10",
+    nickname: "night-ow4",
+    avatarUrl: DEFAULT_GRAY_AVATAR,
+    isHost: false,
+  },
+  {
+    id: "user11",
+    nickname: "night-o5wl",
+    avatarUrl: DEFAULT_GRAY_AVATAR,
+    isHost: false,
+  },
+  {
+    id: "user12",
+    nickname: "night-o6wl",
+    avatarUrl: DEFAULT_GRAY_AVATAR,
+    isHost: false,
+  },
 ];

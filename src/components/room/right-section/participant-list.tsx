@@ -9,7 +9,7 @@ export default function ParticipantList({ users = [] }: { users: User[] }) {
         <span className="text-xs text-gray-500 ml-4">{users.length}명</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto max-h-[400px] pr-1">
+      <div className="flex-1 overflow-y-auto max-h-[460px] pr-1">
         {users.map((u) => (
           <ParticipantCard key={u.id} user={u} />
         ))}
