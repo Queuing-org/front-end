@@ -51,13 +51,18 @@ export default function RoomPage() {
         exitHref="/main"
       />
 
-      <main className="flex-1 p-4 grid gap-4 grid-cols-1 lg:grid-cols-[minmax(240px,320px)_1fr_minmax(220px,280px)]">
+      <main
+        className="flex-1 p-4 grid gap-18 grid-cols-1 justify-center
+                  lg:[grid-template-columns:minmax(160px,320px)_720px_minmax(140px,280px)]
+                  xl:[grid-template-columns:minmax(200px,340px)_820px_minmax(180px,300px)]
+                  "
+      >
         <aside className="order-2 lg:order-1 w-full min-w-0">
           <QueueList onOpenAddSong={() => setOpenAdd(true)} />
         </aside>
 
         <section className="order-1 lg:order-2 w-full min-w-0 flex justify-center">
-          <div className="w-full max-w-[960px]">
+          <div className="w-full">
             <YoutubePlayer videoId={videoId} autoplay />
           </div>
         </section>
