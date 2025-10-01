@@ -13,6 +13,7 @@ import { DummyRooms } from "@/dummy-rooms";
 import { DUMMY_PARTICIPANTS } from "@/dummy-users";
 import type { User } from "@/types/user";
 import type { Room } from "@/types/room";
+import MiniPlayground from "@/components/room/pixi/play-ground";
 
 export default function RoomPage() {
   const params = useParams<{ code: string }>();
@@ -43,7 +44,7 @@ export default function RoomPage() {
   }, [code]);
 
   return (
-    <div className="bg-white text-[#17171B] min-h-screen flex flex-col ">
+    <div className="bg-white text-[#17171B] min-h-dvh flex flex-col overflow-hidden">
       <TopBar
         title={room?.title ?? "방제목"}
         currentListeners={memberCount}
@@ -52,11 +53,9 @@ export default function RoomPage() {
       />
 
       <main
-        className="flex-1 p-4 grid gap-18 grid-cols-1 justify-center
-                  lg:[grid-template-columns:minmax(160px,320px)_720px_minmax(140px,280px)]
-                  xl:[grid-template-columns:minmax(200px,340px)_820px_minmax(180px,300px)]
-                  border-b border-gray-200
-                  "
+        className="flex-none px-4 pt-4 pb-2 grid gap-14 grid-cols-1 justify-center
+             lg:[grid-template-columns:minmax(160px,320px)_720px_minmax(140px,280px)]
+             xl:[grid-template-columns:minmax(200px,340px)_820px_minmax(180px,300px)]"
       >
         <aside className="order-2 lg:order-1 w-full min-w-0">
           <QueueList onOpenAddSong={() => setOpenAdd(true)} />
@@ -72,6 +71,12 @@ export default function RoomPage() {
           <ParticipantList users={users} />
         </aside>
       </main>
+
+      <section className="flex-none px-14 pb-4 overflow-hidden">
+        <div className="h-[320px] md:h-[380px] lg:h-[440px] xl:h-[410px]">
+          <MiniPlayground />
+        </div>
+      </section>
 
       <AddSongModal open={openAdd} onClose={() => setOpenAdd(false)} />
     </div>
