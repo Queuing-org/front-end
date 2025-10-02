@@ -13,6 +13,9 @@ import { DummyRooms } from "@/dummy-rooms";
 import { DUMMY_PARTICIPANTS } from "@/dummy-users";
 import type { User } from "@/types/user";
 import type { Room } from "@/types/room";
+import Vote from "@/components/room/bottom-section/song-history";
+import Chatting from "@/components/room/bottom-section/chatting";
+import SongHistory from "@/components/room/bottom-section/song-history";
 
 export default function RoomPage() {
   const params = useParams<{ code: string }>();
@@ -43,7 +46,7 @@ export default function RoomPage() {
   }, [code]);
 
   return (
-    <div className="bg-white text-[#17171B] min-h-screen flex flex-col ">
+    <div className="bg-white text-[#17171B] h-dvh flex flex-col overflow-hidden">
       <TopBar
         title={room?.title ?? "방제목"}
         currentListeners={memberCount}
@@ -52,11 +55,9 @@ export default function RoomPage() {
       />
 
       <main
-        className="flex-1 p-4 grid gap-18 grid-cols-1 justify-center
-                  lg:[grid-template-columns:minmax(160px,320px)_720px_minmax(140px,280px)]
-                  xl:[grid-template-columns:minmax(200px,340px)_820px_minmax(180px,300px)]
-                  border-b border-gray-200
-                  "
+        className="shrink-0 px-4 pt-4 grid gap-[4.5rem] grid-cols-1 justify-center
+      lg:[grid-template-columns:minmax(160px,320px)_720px_minmax(140px,280px)]
+      xl:[grid-template-columns:minmax(200px,340px)_820px_minmax(180px,300px)]"
       >
         <aside className="order-2 lg:order-1 w-full min-w-0">
           <QueueList onOpenAddSong={() => setOpenAdd(true)} />
@@ -68,10 +69,26 @@ export default function RoomPage() {
           </div>
         </section>
 
-        <aside className="order-3 lg:order-3 w-full min-w-0">
+        <aside className="order-3 lg:order-3 w-full min-w-0 lg:-translate-x-2 xl:-translate-x-4">
           <ParticipantList users={users} />
         </aside>
       </main>
+
+      <section className="flex-1 min-h-0 px-4 pt-2 pb-4 overflow-hidden">
+        <div className="grid h-full min-h-0 grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+          <div className="h-full min-h-0 flex">
+            <div className="flex-1 h-full min-h-0">
+              <SongHistory />
+            </div>
+          </div>
+
+          <div className="h-full min-h-0 flex">
+            <div className="flex-1 h-full min-h-0">
+              <Chatting />
+            </div>
+          </div>
+        </div>
+      </section>
 
       <AddSongModal open={openAdd} onClose={() => setOpenAdd(false)} />
     </div>
