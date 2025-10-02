@@ -13,9 +13,8 @@ import { DummyRooms } from "@/dummy-rooms";
 import { DUMMY_PARTICIPANTS } from "@/dummy-users";
 import type { User } from "@/types/user";
 import type { Room } from "@/types/room";
-import Vote from "@/components/room/bottom-section/song-history";
 import Chatting from "@/components/room/bottom-section/chatting";
-import SongHistory from "@/components/room/bottom-section/song-history";
+import SongHistoryList from "@/components/room/bottom-section/song-history-list";
 
 export default function RoomPage() {
   const params = useParams<{ code: string }>();
@@ -78,7 +77,7 @@ export default function RoomPage() {
         <div className="grid h-full min-h-0 grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
           <div className="h-full min-h-0 flex">
             <div className="flex-1 h-full min-h-0">
-              <SongHistory />
+              <SongHistoryList />
             </div>
           </div>
 
