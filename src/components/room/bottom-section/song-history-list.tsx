@@ -5,38 +5,14 @@ import { History, Music2 } from "lucide-react";
 import SongHistoryCard from "./song-history-card";
 import type { HistoryItem } from "@/types/song-history";
 import { cloneSongHistory } from "./song-history.dummy";
+import { toggleVote } from "@/lib/song-history/vote";
 
 export default function SongHistoryList() {
   // 더미데이터 복사본으로 상태 초기화
   const [items, setItems] = useState<HistoryItem[]>(cloneSongHistory());
 
   const handleVote = (id: string, vote: "up" | "down") => {
-    setItems((prev) =>
-      prev.map((it) => {
-        if (it.id !== id) return it;
-
-        let like = it.likeCount;
-        let dislike = it.dislikeCount;
-        let next: HistoryItem["myVote"] = it.myVote;
-
-        if (it.myVote === vote) {
-          if (vote === "up") like = Math.max(0, like - 1);
-          else dislike = Math.max(0, dislike - 1);
-          next = null;
-        } else {
-          if (vote === "up") {
-            like += 1;
-            if (it.myVote === "down") dislike = Math.max(0, dislike - 1);
-          } else {
-            dislike += 1;
-            if (it.myVote === "up") like = Math.max(0, like - 1);
-          }
-          next = vote;
-        }
-
-        return { ...it, likeCount: like, dislikeCount: dislike, myVote: next };
-      })
-    );
+    setItems((prev) => toggleVote(prev, id, vote));
   };
 
   return (
@@ -55,17 +31,6 @@ export default function SongHistoryList() {
         {items.map((it) => (
           <SongHistoryCard key={it.id} item={it} onVote={handleVote} />
         ))}
-      </div>
-
-      {/* 푸터 */}
-      <div className="flex items-center justify-between border-t border-gray-200 px-4 py-2.5">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
-          <Music2 className="h-3.5 w-3.5" />
-          <span>총 {items.length}곡</span>
-        </div>
-        <div className="text-xs text-gray-500 hidden sm:block">
-          좋아요/싫어요는 데모 UI (로컬 상태)
-        </div>
       </div>
     </div>
   );

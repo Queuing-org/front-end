@@ -5,12 +5,15 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ChevronLeft, Copy, Check, QrCode, Users, LogOut } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
+import { tagClasses, tagLabel } from "@/constants/tags"; // ⬅️ 추가
 
 type TopBarProps = {
   title?: string;
   currentListeners?: number;
   maxListeners?: number;
   exitHref?: string;
+  /** 현재 방 카테고리 키 배열 (kpop, pop, rnb 등) */
+  tags?: string[];
 };
 
 export default function TopBar({
@@ -18,6 +21,8 @@ export default function TopBar({
   currentListeners = 0,
   maxListeners = 0,
   exitHref = "/main",
+  // 기본 5개 태그
+  tags = ["pop", "kpop", "rnb", "ballad", "hiphop"],
 }: TopBarProps) {
   const router = useRouter();
   const params = useParams<{ code?: string | string[] }>();
@@ -64,25 +69,52 @@ export default function TopBar({
     <header className="sticky top-0 z-20 w-full bg-white/90 backdrop-blur border-b border-gray-200">
       <div className="mx-auto flex h-14 items-center justify-between px-4">
         {/* Left */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           <button
             type="button"
             onClick={() => history.back()}
             aria-label="뒤로가기"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 cursor-pointer"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 cursor-pointer shrink-0"
           >
             <ChevronLeft className="h-5 w-5 text-[#17171B]" />
           </button>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col min-w-0">
             <span className="text-sm text-gray-500">Room</span>
-            <h1 className="text-base font-semibold text-[#17171B] leading-5">
-              {title}
-            </h1>
+
+            <div className="flex items-center gap-2 min-w-0">
+              <h1 className="text-base font-semibold text-[#17171B] leading-5 truncate">
+                {title}
+              </h1>
+            </div>
+          </div>
+          <div className="flex items-center gap-1 flex-shrink-0 ml-3">
+            {tags.slice(0, 5).map((t) => (
+              <span
+                key={t}
+                className={`px-2 py-0.5 text-[11px] leading-4 rounded-full ${tagClasses(
+                  t
+                )}`}
+                title={tagLabel(t)}
+              >
+                {tagLabel(t)}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Right */}
+        <div className="flex items-center gap-2" ref={qrRef}>
+          {/* 인원 */}
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1 text-sm text-[#17171B]">
+            <Users className="h-4 w-4" />
+            <span className="tabular-nums">
+              {currentListeners}/{maxListeners}
+            </span>
           </div>
 
           {/* 코드 + 복사 */}
-          <div className="ml-2 flex items-center gap-1">
+          <div className="ml-2 hidden sm:flex items-center gap-1">
             <span className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-[#17171B]">
               코드: {code}
             </span>
@@ -99,17 +131,6 @@ export default function TopBar({
                 <Copy className="h-4 w-4 text-[#17171B]" />
               )}
             </button>
-          </div>
-        </div>
-
-        {/* Right */}
-        <div className="flex items-center gap-2" ref={qrRef}>
-          {/* 인원 */}
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1 text-sm text-[#17171B]">
-            <Users className="h-4 w-4" />
-            <span className="tabular-nums">
-              {currentListeners}/{maxListeners}
-            </span>
           </div>
 
           {/* QR 버튼 */}
