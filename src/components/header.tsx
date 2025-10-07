@@ -1,8 +1,8 @@
 // src/components/header.jsx
 "use client";
 
-import { useRef, useState } from "react";
-import { Power } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Power, User, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import SearchBar from "./topbar/search-bar";
 import Image from "next/image";
@@ -14,6 +14,35 @@ export default function Header() {
 
   const router = useRouter();
   const nickname = "하드코딩닉네임";
+
+  // ✅ 바깥 클릭/터치 & Esc 로 닫기
+  useEffect(() => {
+    if (!open) return;
+
+    const handlePointerDown = (e: Event) => {
+      const target = e.target as Node | null;
+      if (!wrapRef.current) return;
+      if (target && !wrapRef.current.contains(target)) {
+        setOpen(false);
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown, {
+      capture: true,
+    });
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown, {
+        capture: true,
+      } as any);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
 
   return (
     <header className="relative z-50 isolate bg-white py-3 px-6 mt-[-15px]">
@@ -60,8 +89,25 @@ export default function Header() {
             {open && (
               <div
                 role="menu"
-                className="absolute top-full mt-2 right-0 z-50 w-44 rounded-xl border border-black/5 bg-white/90 shadow-lg ring-1 ring-black/5 overflow-hidden"
+                className="absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden rounded-xl border border-gray-200 bg-white/80 shadow-lg ring-1 ring-black/5 backdrop-blur"
               >
+                {/* 내 프로필 */}
+                <button
+                  type="button"
+                  onClick={() => router.push("/my-profile")}
+                  className="cursor-pointer flex w-full items-center justify-between gap-3 px-4 py-3 text-sm text-[#17171B] hover:bg-gray-50 focus:bg-gray-50 focus:outline-none"
+                  role="menuitem"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <User className="h-5 w-5 text-gray-600" />내 프로필
+                  </span>
+                  <ChevronRight className="h-4 w-4 text-gray-400" />
+                </button>
+
+                {/* 구분선 */}
+                <div className="h-px bg-gray-100" />
+
+                {/* 로그아웃 */}
                 <button
                   type="button"
                   onClick={() => {
@@ -69,9 +115,10 @@ export default function Header() {
                   }}
                   disabled={loggingOut}
                   aria-busy={loggingOut}
-                  className="w-full flex items-center gap-2 px-4 py-3 text-red-600 hover:bg-red-50/90 transition-colors cursor-pointer disabled:opacity-60"
+                  className="cursor-pointer flex w-full items-center gap-2 px-4 py-3 text-sm text-red-600 hover:bg-red-50 focus:bg-red-50 disabled:opacity-60"
+                  role="menuitem"
                 >
-                  <Power className="w-5 h-5" />
+                  <Power className="h-5 w-5" />
                   로그아웃
                 </button>
               </div>
