@@ -1,7 +1,7 @@
 // src/components/hamburger/sidebar.tsx
 "use client";
 
-import { Users, Star, History } from "lucide-react";
+import { Users, Star, History, StoreIcon, TrophyIcon } from "lucide-react";
 import FriendsSection from "./friends-section/friends-section";
 import FavoritesSection from "./favorite-section/favorite-section";
 import HistorySection from "./history-section/history-section";
@@ -25,6 +25,14 @@ export default function Sidebar({ open }: { open: boolean }) {
           <div className="flex flex-col items-center gap-1">
             <History className="h-6 w-6" />
             <span className="text-[11px]">기록</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <TrophyIcon className="h-6 w-6" />
+            <span className="text-[11px]">업적</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <StoreIcon className="h-6 w-6" />
+            <span className="text-[11px]">상점</span>
           </div>
         </div>
       )}
