@@ -19,37 +19,45 @@ export default function Sidebar({ open }: { open: boolean }) {
 
   return (
     <aside style={{ width }} className="bg-white h-full">
-      {/* 접힘: 아이콘 레일 */}
       {!open && (
-        <div className="h-full flex flex-col items-center pt-6 gap-7 text-gray-600">
-          <div className="flex flex-col items-center gap-1">
-            <Users className="h-6 w-6" />
-            <span className="text-[11px]">친구목록</span>
-          </div>
-          <div className="flex flex-col items-center gap-1">
+        <div className="h-full flex flex-col items-center pt-4 gap-1 text-gray-600">
+          {/* 즐겨찾기 */}
+          <div
+            className="flex flex-col items-center gap-1 p-2 rounded-md
+                      cursor-pointer hover:bg-gray-100 hover:text-gray-900 transition-colors"
+          >
             <Star className="h-6 w-6" />
             <span className="text-[11px]">즐겨찾기</span>
           </div>
-          <div className="flex flex-col items-center gap-1">
+
+          {/* 기록 */}
+          <div
+            className="flex flex-col items-center gap-1 p-2 rounded-md
+                      cursor-pointer hover:bg-gray-100 hover:text-gray-900 transition-colors"
+          >
             <History className="h-6 w-6" />
             <span className="text-[11px]">기록</span>
           </div>
 
+          {/* 업적 */}
           <button
             onClick={() => router.push("/main/achievements")}
-            className="flex flex-col items-center gap-1"
+            className="flex flex-col items-center gap-1 p-2 rounded-md
+                   cursor-pointer hover:bg-gray-100 hover:text-gray-900 transition-colors"
+            type="button"
           >
-            {isAchievements ? (
-              <TrophyIcon className="h-6 w-6 text-yellow-400" />
-            ) : (
-              <TrophyIcon className="h-6 w-6" />
-            )}
+            {/* 선택된 경우 노란색 유지, 아니면 부모 색상 상속 */}
+            <TrophyIcon
+              className={`h-6 w-6 ${isAchievements ? "text-yellow-400" : ""}`}
+            />
             <span className="text-[11px]">업적</span>
           </button>
 
+          {/* 상점 */}
           <button
             onClick={() => router.push("/main/shop")}
-            className="flex flex-col items-center gap-1 cursor-pointer"
+            className="flex flex-col items-center gap-1 p-2 rounded-md
+                   cursor-pointer hover:bg-gray-100 hover:text-gray-900 transition-colors"
             aria-current={isShop ? "page" : undefined}
             type="button"
             title="상점"
@@ -63,11 +71,7 @@ export default function Sidebar({ open }: { open: boolean }) {
             ) : (
               <StoreIcon className="h-6 w-6" />
             )}
-            <span
-              className={["text-[11px]", isShop ? "font-semibold" : ""].join(
-                " "
-              )}
-            >
+            <span className={`text-[11px] ${isShop ? "font-semibold" : ""}`}>
               상점
             </span>
           </button>
