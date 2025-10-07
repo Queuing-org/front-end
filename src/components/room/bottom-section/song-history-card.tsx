@@ -60,7 +60,7 @@ export default function SongHistoryCard({
             className={[
               "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs",
               isUp
-                ? "bg-[#17171B] border-[#17171B] text-white"
+                ? "bg-[#10B981] border-[#10B981] text-white"
                 : "border-gray-200 text-[#17171B] hover:bg-gray-100",
             ].join(" ")}
           >
@@ -74,7 +74,7 @@ export default function SongHistoryCard({
             className={[
               "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs",
               isDown
-                ? "bg-[#17171B] border-[#17171B] text-white"
+                ? "bg-[#F43F5E] border-[#F43F5E] text-white"
                 : "border-gray-200 text-[#17171B] hover:bg-gray-100",
             ].join(" ")}
           >

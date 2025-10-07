@@ -16,7 +16,7 @@ export default function SongHistoryList() {
   };
 
   return (
-    <div className="w-full h-full rounded-2xl border border-gray-200 bg-white shadow-sm flex flex-col overflow-hidden">
+    <div className="w-full h-full rounded-2xl border border-gray-200 bg-white flex flex-col overflow-hidden">
       {/* 헤더 */}
       <div className="flex items-center gap-2 px-4 pt-3">
         <History className="h-4 w-4 text-[#17171B]" />
