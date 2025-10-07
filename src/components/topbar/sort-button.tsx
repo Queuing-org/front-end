@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpDown, Check } from "lucide-react";
+import { ArrowUpDown, Check, LogIn } from "lucide-react";
 
 const DEFAULT_OPTIONS: string[] = ["최신순", "인원 많은 순", "인원 적은 순"];
 
@@ -43,8 +43,8 @@ export default function SortButton({
         aria-expanded={openSort}
         className="inline-flex cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-[#17171B] hover:bg-gray-50"
       >
-        <ArrowUpDown className="h-4 w-4" />
-        <span className="font-medium">정렬</span>
+        <LogIn className="h-4 w-4" />
+        <span className="font-medium">방 입장</span>
       </button>
 
       {openSort && (

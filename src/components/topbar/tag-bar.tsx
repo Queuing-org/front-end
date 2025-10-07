@@ -3,7 +3,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TAG_META, tagClasses, tagLabel } from "@/constants/tags";
-import { SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X, ChevronRight } from "lucide-react";
 
 type TagKey = keyof typeof TAG_META;
 
@@ -23,6 +23,10 @@ export default function TagBar({ onChange }: TagBarProps) {
   const [openEdit, setOpenEdit] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
 
+  // ▼ 추가: 전체/필터 모드 & 인라인 확장
+  const [mode, setMode] = useState<"all" | "filtered">("all");
+  const [showInline, setShowInline] = useState(false);
+
   const atLimit = favorites.length >= MAX_FAVORITES;
 
   useEffect(() => {
@@ -36,7 +40,8 @@ export default function TagBar({ onChange }: TagBarProps) {
         setOpenEdit(false);
       }
     };
-    const onEsc = (e: KeyboardEvent) => e.key === "Escape" && setOpenEdit(false);
+    const onEsc = (e: KeyboardEvent) =>
+      e.key === "Escape" && setOpenEdit(false);
     document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onEsc);
     return () => {
@@ -44,6 +49,11 @@ export default function TagBar({ onChange }: TagBarProps) {
       document.removeEventListener("keydown", onEsc);
     };
   }, [openEdit]);
+
+  // mode가 all로 바뀌면 인라인 펼침 닫기
+  useEffect(() => {
+    if (mode === "all") setShowInline(false);
+  }, [mode]);
 
   const addFavorite = (t: TagKey) => {
     if (atLimit || favorites.includes(t)) return;
@@ -57,26 +67,81 @@ export default function TagBar({ onChange }: TagBarProps) {
   };
   const clearFavorites = () => setFavorites([]);
 
+  // 버튼 공통 스타일
+  const pillBase =
+    "shrink-0 whitespace-nowrap rounded-full px-4 py-1 text-[14px] font-medium transition cursor-pointer";
+  const neutralPill =
+    "border border-gray-200 bg-white text-[#17171B] hover:bg-gray-50";
+  const activePill =
+    "bg-[#17171B] text-white border border-[#17171B] hover:opacity-90";
+
   return (
     <div ref={rootRef} className="relative w-full bg-white">
       {/* 상단 바 */}
       <div className="flex items-center justify-between gap-2 px-4 pt-5">
+        {/* 좌측: 전체 방 / 필터링된 방 + (선택 태그 인라인 펼침) */}
         <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto">
-          {favorites.map((t) => (
-            <button
-              key={t}
-              type="button"
-              className={[
-                "shrink-0 whitespace-nowrap rounded-full px-4 py-1 text-xs transition cursor-pointer",
-                `${tagClasses(t)} hover:bg-gray-200`,
-              ].join(" ")}
-              title={tagLabel(t)}
-            >
-              {tagLabel(t)}
-            </button>
-          ))}
+          {/* 전체 방 버튼 */}
+          <button
+            type="button"
+            onClick={() => setMode("all")}
+            aria-pressed={mode === "all"}
+            className={[
+              pillBase,
+              mode === "all" ? activePill : neutralPill,
+            ].join(" ")}
+            title="전체 방 보기"
+          >
+            전체 방
+          </button>
+
+          {/* 필터링된 방 버튼 */}
+          <button
+            type="button"
+            onClick={() => {
+              setMode("filtered");
+              setShowInline((v) => !v);
+            }}
+            aria-pressed={mode === "filtered"}
+            className={[
+              pillBase,
+              mode === "filtered" ? activePill : neutralPill,
+              "inline-flex items-center gap-1.5",
+            ].join(" ")}
+            title="필터링된 방"
+          >
+            필터링된 방
+            <ChevronRight
+              className={`h-3.5 w-3.5 transition-transform ${
+                showInline && mode === "filtered" ? "rotate-90" : ""
+              }`}
+            />
+          </button>
+
+          {/* 선택된 태그들 인라인 표시(필터링된 방 + 펼침 상태일 때만) */}
+          {mode === "filtered" && showInline && (
+            <div className="flex min-w-0 items-center gap-2 overflow-x-auto pl-1">
+              {favorites.length ? (
+                favorites.map((t) => (
+                  <span
+                    key={`inline-${t}`}
+                    className={[
+                      "shrink-0 whitespace-nowrap rounded-full px-4 py-1 text-xs",
+                      tagClasses(t),
+                    ].join(" ")}
+                    title={tagLabel(t)}
+                  >
+                    {tagLabel(t)}
+                  </span>
+                ))
+              ) : (
+                <span className="text-xs text-gray-500">선택된 태그 없음</span>
+              )}
+            </div>
+          )}
         </div>
 
+        {/* 편집 버튼 */}
         <button
           type="button"
           onClick={() => setOpenEdit((v) => !v)}
