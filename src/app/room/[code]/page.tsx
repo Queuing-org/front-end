@@ -9,8 +9,8 @@ import TopBar from "@/components/room/top-bar";
 import YoutubePlayer from "@/components/room/youtube-player";
 import AddSongModal from "@/components/room/queue/add-song-modal";
 import { useParams } from "next/navigation";
-import { DummyRooms } from "@/dummy-rooms";
-import { DUMMY_PARTICIPANTS } from "@/dummy-users";
+import { DummyRooms } from "@/dummy/dummy-rooms";
+import { DUMMY_PARTICIPANTS } from "@/dummy/dummy-users";
 import type { User } from "@/types/user";
 import type { Room } from "@/types/room";
 import Chatting from "@/components/room/bottom-section/chatting";
@@ -49,7 +49,6 @@ export default function RoomPage() {
       <TopBar
         title={room?.title ?? "방제목"}
         currentListeners={memberCount}
-        maxListeners={room?.limitedListeners ?? 0}
         exitHref="/main"
       />
 

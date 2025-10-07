@@ -89,17 +89,16 @@ export default function RoomCard({ room }: { room: RoomLike }) {
       tabIndex={0}
       onClick={go}
       onKeyDown={onKeyDown}
-      className="h-full rounded-xl bg-white ring-1 ring-gray-200 shadow-sm overflow-hidden cursor-pointer transition
-                 hover:shadow-md hover:ring-[#17171B]/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#17171B]/30"
+      className="h-full rounded-xl bg-white border-none  overflow-hidden cursor-pointer"
     >
-      {/* 썸네일 (콤팩트: 5:3) */}
-      <div className="relative w-full aspect-[16/11] bg-gray-100">
+      {/* 썸네일 */}
+      <div className="relative w-full aspect-[16/11] bg-gray-100 rounded-xl overflow-hidden group">
         <Image
           src={thumbSrc}
           alt={`${title} 썸네일`}
           fill
           sizes="(min-width:1024px) 260px, (min-width:768px) 33vw, 100vw"
-          className="object-cover"
+          className="object-cover transition duration-100 group-hover:brightness-60"
         />
         {/* 좌상단 인원 배지 (축소) */}
         <div className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-md bg-black/70 px-2 py-0.5 text-[13px] text-white backdrop-blur-sm">
@@ -109,7 +108,7 @@ export default function RoomCard({ room }: { room: RoomLike }) {
       </div>
 
       {/* 본문 (축소된 패딩/타이포) */}
-      <div className="p-3">
+      <div className="py-3 px-1">
         <div className="flex items-center gap-2.5">
           <Image
             src={avatarSrc}

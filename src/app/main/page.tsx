@@ -2,12 +2,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Header from "@/components/header";
 import RoomList from "@/components/room-list";
 import CreateRoom from "@/components/topbar/create-room";
 import SortButton from "@/components/topbar/sort-button";
 import TagBar from "@/components/topbar/tag-bar";
-import { DummyRooms } from "@/dummy-rooms";
+import { DummyRooms } from "@/dummy/dummy-rooms";
 import type { Room } from "@/types/room";
 
 export default function MainPage() {
@@ -22,8 +21,8 @@ export default function MainPage() {
   }, [activeTags]);
 
   return (
-    <div className="bg-[#FFFFFF] h-screen p-6 text-[#17171B]">
-      <Header />
+    <div className="bg-[#FFFFFF] h-screen  text-[#17171B]">
+      <div className="-ml-3 pr-4 pt-2"></div>
       <div className="justify-between flex">
         <TagBar onChange={setActiveTags} />
         <div className="flex gap-2 items-center pt-5 mr-5">

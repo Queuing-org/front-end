@@ -37,7 +37,7 @@ export default function MyProfile() {
   return (
     <div className="min-h-dvh bg-white text-[#17171B]">
       {/* 페이지 헤더 */}
-      <header className="border-b border-gray-200">
+      <header>
         <div className="mx-auto max-w-4xl px-4 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">

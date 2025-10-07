@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 import { myQueueAtom } from "@/atoms/queue";
 import Modal from "@/components/ui/modal";
 import { X, Trash2, ChevronUp, ChevronDown } from "lucide-react";
-import { fmtDuration } from "@/dummy-queue-songs";
+import { fmtDuration } from "@/dummy/dummy-queue-songs";
 import type { Track } from "@/types/track";
 import Image from "next/image";
 

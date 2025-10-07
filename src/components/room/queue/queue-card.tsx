@@ -1,7 +1,7 @@
 // src/components/room/queue/QueueCard.tsx
 "use client";
 
-import { fmtDuration } from "@/dummy-queue-songs";
+import { fmtDuration } from "@/dummy/dummy-queue-songs";
 import Image from "next/image";
 import type { Track } from "@/types/track";
 

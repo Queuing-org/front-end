@@ -1,6 +1,6 @@
 // components/room-list.jsx
 import RoomCard from "./room-card";
-import { DummyRooms } from "../dummy-rooms";
+import { DummyRooms } from "../dummy/dummy-rooms";
 import { Room } from "@/types/room";
 
 export default function RoomList() {
