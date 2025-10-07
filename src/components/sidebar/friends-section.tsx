@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { Users } from "lucide-react";
 import Image from "next/image";
 import {
   ChevronDown,
@@ -25,7 +26,7 @@ export default function FriendsSection() {
         onClick={() => setOpen((v) => !v)}
       >
         <span className="inline-flex items-center gap-2">
-          <span className="h-5 w-5 rounded-md bg-gray-900" />
+          <Users className="h-4 w-4 text-gray-500" />
           친구 목록
         </span>
         {open ? (

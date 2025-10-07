@@ -5,6 +5,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { ChevronDown, ChevronRight, Headphones } from "lucide-react";
 import { FAV_ROOMS_DUMMY, FavRoom } from "@/dummy/favRooms";
+import { Star } from "lucide-react";
 
 export default function FavoritesSection() {
   const [open, setOpen] = useState(true);
@@ -16,7 +17,7 @@ export default function FavoritesSection() {
         onClick={() => setOpen((v) => !v)}
       >
         <span className="inline-flex items-center gap-2">
-          <span className="h-5 w-5 rounded-md bg-gray-900" />
+          <Star className="h-4 w-4 text-gray-500" />
           즐겨찾기 방
         </span>
         {open ? (

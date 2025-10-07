@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronRight, Clock } from "lucide-react";
 import { HISTORY_DUMMY, HistoryItem } from "@/dummy/history";
+import { History } from "lucide-react";
 
 export default function HistorySection() {
   const [open, setOpen] = useState(true);
@@ -15,7 +16,7 @@ export default function HistorySection() {
         onClick={() => setOpen((v) => !v)}
       >
         <span className="inline-flex items-center gap-2">
-          <span className="h-5 w-5 rounded-md bg-gray-900" />
+          <History className="h-4 w-4 text-gray-500" />
           기록
         </span>
         {open ? (
