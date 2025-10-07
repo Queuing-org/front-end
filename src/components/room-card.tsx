@@ -1,59 +1,38 @@
+// components/room/RoomCard.tsx
 "use client";
 
-import { Music2, Users2, Lock } from "lucide-react";
-import { TAG_META, tagClasses, tagLabel } from "@/constants/tags";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Users2, Lock } from "lucide-react";
+import { tagClasses, tagLabel, TAG_META } from "@/constants/tags";
 
-// ── 타입들 ────────────────────────────────────────────────────────────────
-type NowPlaying = {
-  title: string;
-  artist: string;
-  durationSec: number;
-  positionMs?: number;
-};
+type TagInput = string | { key?: string; tag?: string; value?: string };
 
-type TagInput =
-  | string
-  | {
-      key?: string;
-      tag?: string;
-      value?: string;
-    };
-
-type RoomLike = {
+export type RoomLike = {
+  code: string;
   title: string;
   hostNickname: string;
+  hostAvatarUrl?: string | null;
   isPrivate?: boolean;
-  tags?: TagInput[];
   listenersCount?: number;
-  limitedListeners?: number | null;
-  nowPlaying?: NowPlaying | null;
-  code: string;
+  tags?: TagInput[];
+  thumbnail?: string | null; // ← optional/nullable도 허용
 };
 
-// ── 레이블/변형값을 TAG_META의 정식 키로 정규화 ───────────────────────────
+// 라벨/별칭 → TAG_META 키 정규화
 function normalizeTagKey(input: unknown): string | null {
   if (input == null) return null;
-
   const raw =
     typeof input === "string"
       ? input
       : (input as any).key ?? (input as any).tag ?? (input as any).value ?? "";
-
   const s = String(raw).trim();
   if (!s) return null;
-
-  // 이미 키면 통과
   if (Object.prototype.hasOwnProperty.call(TAG_META as object, s)) return s;
-
   const lower = s.toLowerCase();
-
-  // 라벨(표시값)과 대소문자만 다른 경우 매칭
   for (const k of Object.keys(TAG_META as object)) {
     if (String(tagLabel(k as any)).toLowerCase() === lower) return k;
   }
-
-  // 하이픈/공백 제거 등 캐노니컬라이즈 후 별칭 매핑
   const canonical = lower.replace(/[\s-]/g, "");
   const alias: Record<string, string> = {
     kpop: "kpop",
@@ -75,88 +54,98 @@ function normalizeTagKey(input: unknown): string | null {
   return alias[canonical] ?? null;
 }
 
-// ── 컴포넌트 ─────────────────────────────────────────────────────────────
 export default function RoomCard({ room }: { room: RoomLike }) {
   const router = useRouter();
-
   const {
+    code,
     title,
     hostNickname,
+    hostAvatarUrl,
+    thumbnail,
+    listenersCount = 0,
     isPrivate = false,
     tags = [],
-    listenersCount = 0,
-    limitedListeners,
-    nowPlaying,
-    code,
   } = room;
 
-  const normalizedTags = Array.isArray(tags)
-    ? (tags
-        .map((t) => normalizeTagKey(t))
-        .filter((k): k is string => Boolean(k)) as string[])
-    : [];
+  // 안전한 기본값
+  const thumbSrc = thumbnail || "/room-dummy-img/room-img1.png";
+  const avatarSrc = hostAvatarUrl || "/default-avatar.jpg";
 
-  const isFull =
-    typeof limitedListeners === "number" &&
-    limitedListeners > 0 &&
-    listenersCount >= limitedListeners;
+  const normalizedTags = (Array.isArray(tags) ? tags : [])
+    .map((t) => normalizeTagKey(t))
+    .filter((v): v is string => !!v);
 
-  const progress = nowPlaying?.durationSec
-    ? Math.min(
-        100,
-        ((nowPlaying.positionMs ?? 0) / (nowPlaying.durationSec * 1000)) * 100
-      )
-    : 0;
+  const go = () => router.push(`/room/${code}`);
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      go();
+    }
+  };
 
   return (
-    <div className="rounded-2xl bg-white ring-1 ring-gray-200 shadow-sm transition hover:shadow-md hover:ring-[#17171B]/25">
-      <div className="p-4">
-        {/* 헤더 */}
-        <div className="flex items-center justify-between gap-2">
-          <h3 className="text-base font-semibold text-[#17171B] truncate">
-            {title}
-          </h3>
-          {isPrivate && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-[#17171B]/5 px-2 py-0.5 text-xs text-[#17171B] ring-1 ring-[#17171B]/15">
-              <Lock className="h-3.5 w-3.5 text-[#17171B]" />
-              잠금
-            </span>
-          )}
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={go}
+      onKeyDown={onKeyDown}
+      className="h-full rounded-xl bg-white ring-1 ring-gray-200 shadow-sm overflow-hidden cursor-pointer transition
+                 hover:shadow-md hover:ring-[#17171B]/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#17171B]/30"
+    >
+      {/* 썸네일 (콤팩트: 5:3) */}
+      <div className="relative w-full aspect-[16/11] bg-gray-100">
+        <Image
+          src={thumbSrc}
+          alt={`${title} 썸네일`}
+          fill
+          sizes="(min-width:1024px) 260px, (min-width:768px) 33vw, 100vw"
+          className="object-cover"
+        />
+        {/* 좌상단 인원 배지 (축소) */}
+        <div className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-md bg-black/70 px-2 py-0.5 text-[13px] text-white backdrop-blur-sm">
+          <Users2 className="h-3 w-3" />
+          <span className="tabular-nums">{listenersCount}명</span>
+        </div>
+      </div>
+
+      {/* 본문 (축소된 패딩/타이포) */}
+      <div className="p-3">
+        <div className="flex items-center gap-2.5">
+          <Image
+            src={avatarSrc}
+            alt="호스트 아바타"
+            width={32}
+            height={32}
+            className="h-8 w-8 rounded-full object-cover ring-1 ring-black/5"
+          />
+          <div className="min-w-0 flex-1">
+            <div className="flex justify-between items-center gap-1.5">
+              <h3 className="truncate text-sm font-semibold text-[#17171B]">
+                {title}
+              </h3>
+              {isPrivate && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#17171B]/5 px-1.5 py-[2px] text-[10px] text-[#17171B] ring-1 ring-[#17171B]/15">
+                  <Lock className="h-3 w-3" />
+                  잠금
+                </span>
+              )}
+            </div>
+            <p className="mt-0.5 text-[11px] text-gray-500 truncate">
+              호스트 ·{" "}
+              <span className="font-medium text-gray-700">{hostNickname}</span>
+            </p>
+          </div>
         </div>
 
-        {/* 방장 */}
-        <p className="mt-1 text-sm text-gray-500">
-          방장:{" "}
-          <span className="font-medium text-gray-700">{hostNickname}</span>
-        </p>
-
-        {/* 현재 재생 */}
-        {nowPlaying && (
-          <div className="mt-3 rounded-xl bg-gray-50 p-3 ring-1 ring-gray-100">
-            <div className="flex items-center gap-2 text-sm text-gray-800">
-              <Music2 className="h-4 w-4 text-gray-400" />
-              <span className="truncate">{nowPlaying.title}</span>
-              <span className="text-gray-300">·</span>
-              <span className="truncate text-gray-600">
-                {nowPlaying.artist}
-              </span>
-            </div>
-            <div className="mt-2 h-2 w-full rounded-full bg-rose-100">
-              <div
-                className="h-2 rounded-full bg-gradient-to-r from-rose-400 to-rose-100 transition-[width]"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* 태그 */}
+        {/* 태그 (더 작게) */}
         {!!normalizedTags.length && (
-          <div className="mt-3 flex flex-wrap items-center gap-1.5">
+          <div className="mt-2 flex flex-wrap items-center gap-1">
             {normalizedTags.map((k) => (
               <span
                 key={k}
-                className={`rounded-full px-2 py-0.5 text-xs ${tagClasses(k)}`}
+                className={`rounded-full px-1.5 py-[2px] text-[10px] ${tagClasses(
+                  k
+                )}`}
                 title={tagLabel(k)}
               >
                 {tagLabel(k)}
@@ -164,47 +153,6 @@ export default function RoomCard({ room }: { room: RoomLike }) {
             ))}
           </div>
         )}
-
-        {/* 푸터 */}
-        <div className="mt-4 flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-sm">
-            <Users2
-              className={`h-4 w-4 ${
-                isFull ? "text-rose-600" : "text-gray-500"
-              }`}
-            />
-            <span
-              className={`${
-                isFull ? "text-rose-700 font-semibold" : "text-gray-800"
-              }`}
-            >
-              {listenersCount}
-              {typeof limitedListeners === "number"
-                ? ` / ${limitedListeners}`
-                : ""}{" "}
-              명
-            </span>
-            {isFull && (
-              <span className="ml-2 rounded-full bg-rose-50 px-2 py-0.5 text-xs text-rose-700 ring-1 ring-rose-200">
-                가득참
-              </span>
-            )}
-          </div>
-
-          <button
-            onClick={() => router.push(`/room/${code}`)}
-            disabled={isFull}
-            className={[
-              "rounded-full px-4 py-1.5 text-xs font-medium transition focus:outline-none cursor-pointer",
-              "focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#17171B]/30",
-              isFull
-                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                : "bg-[#17171B] text-white hover:opacity-90",
-            ].join(" ")}
-          >
-            입장하기
-          </button>
-        </div>
       </div>
     </div>
   );
