@@ -2,9 +2,9 @@
 "use client";
 
 import { Users, Star, History } from "lucide-react";
-import FriendsSection from "./friends-section";
-import FavoritesSection from "./favorite-section";
-import HistorySection from "./history-section";
+import FriendsSection from "./friends-section/friends-section";
+import FavoritesSection from "./favorite-section/favorite-section";
+import HistorySection from "./history-section/history-section";
 
 export default function Sidebar({ open }: { open: boolean }) {
   const width = open ? 280 : 80;
@@ -31,13 +31,19 @@ export default function Sidebar({ open }: { open: boolean }) {
 
       {/* 펼침: 섹션들 */}
       {open && (
-        <div className="h-full overflow-y-auto pb-6">
-          <nav className="py-2 space-y-4">
-            <FriendsSection />
-            <div className="h-px bg-gray-100" />
-            <FavoritesSection />
-            <div className="h-px bg-gray-100" />
-            <HistorySection />
+        <div className="h-full overflow-y-auto">
+          <nav className="py-2 ">
+            <div className="px-3">
+              <FriendsSection />
+            </div>
+            <div className="h-px bg-gray-300 mx-5" />
+            <div className="px-3">
+              <FavoritesSection />
+            </div>
+            <div className="h-px bg-gray-300 mx-5" />
+            <div className="px-3">
+              <HistorySection />
+            </div>
           </nav>
         </div>
       )}
