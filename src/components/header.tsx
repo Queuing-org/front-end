@@ -55,7 +55,10 @@ export default function Header({ sidebarOpen, onToggleSidebar }: HeaderProps) {
             onClick={onToggleSidebar}
             className="h-7 w-7 cursor-pointer ml-[-6px]"
           />
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-gray-900">
+          <h1
+            onClick={() => router.push("/main")}
+            className="flex items-center gap-2 text-2xl font-bold text-gray-900 cursor-pointer"
+          >
             <Image
               src="/queuing-logo-mark.svg"
               alt="Queuing"
