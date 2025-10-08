@@ -103,7 +103,7 @@ export default function CreateRoom() {
           <div className="mt-4 space-y-4">
             {/* 방 이름 */}
             <div>
-              <label className="block text-sm text-gray-600 mb-1">
+              <label className="block text-sm text-gray-600 mb-1 px-1">
                 방 이름
               </label>
               <input
@@ -117,7 +117,9 @@ export default function CreateRoom() {
 
             {/* 비공개 여부 */}
             <div className="flex items-center justify-between">
-              <label className="text-sm text-gray-600">비공개 방</label>
+              <label className="text-sm text-gray-600 px-1">
+                비밀번호 설정
+              </label>
               <input
                 type="checkbox"
                 checked={isPrivate}
@@ -129,9 +131,9 @@ export default function CreateRoom() {
             {/* 비밀번호 입력 */}
             {isPrivate && (
               <div>
-                <label className="block text-sm text-gray-600 mb-1">
+                {/* <label className="block text-sm text-gray-600 mb-1 px-1">
                   비밀번호
-                </label>
+                </label> */}
                 <input
                   type="password"
                   placeholder="비밀번호를 입력하세요"
@@ -139,12 +141,12 @@ export default function CreateRoom() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <p className="mt-1 text-xs text-gray-500">4자 이상</p>
+                <p className="mt-1 text-xs text-gray-500 px-2">4자 이상</p>
               </div>
             )}
 
             {/* ✅ 최대 인원 */}
-            <div>
+            {/* <div>
               <div className="flex items-center justify-between">
                 <label className="block text-sm text-gray-600 mb-1">
                   최대 인원
@@ -163,12 +165,12 @@ export default function CreateRoom() {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
 
             {/* 태그(옵션) */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="block text-sm text-gray-600 mb-1">
+                <label className="block text-sm text-gray-600 mb-1 px-1">
                   태그(선택)
                 </label>
                 <span className="text-[11px] text-gray-500">
