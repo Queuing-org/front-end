@@ -92,7 +92,7 @@ export default function RoomCard({ room }: { room: RoomLike }) {
       className="h-full rounded-xl bg-white border-none  overflow-hidden cursor-pointer"
     >
       {/* 썸네일 */}
-      <div className="relative w-full aspect-[16/11] bg-gray-100 rounded-xl overflow-hidden group">
+      <div className="relative w-full aspect-[1/1] bg-gray-100 rounded-xl overflow-hidden group">
         <Image
           src={thumbSrc}
           alt={`${title} 썸네일`}
