@@ -35,23 +35,3 @@ body:
         - [ ] 스샷/영상 1개 첨부
     validations:
       required: true
-
-  - type: input
-    id: files
-    attributes:
-      label: File hint (선택)
-      description: 어디에 만들지 힌트(1줄)
-      value: |
-        예) src/features/auth/ui/LoginModal.tsx
-    validations:
-      required: false
-
-  - type: input
-    id: ref
-    attributes:
-      label: Link (선택)
-      description: Figma/참고 링크 1줄
-      value: |
-        예) Figma 링크 / API 문서 링크
-    validations:
-      required: false
