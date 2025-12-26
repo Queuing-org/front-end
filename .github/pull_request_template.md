@@ -1,3 +1,7 @@
+## Title (규칙)
+
+예)feat: room header UI
+
 ## Summary
 
 - 무엇을 했는지 1~3줄로 요약
@@ -6,7 +10,7 @@
 
 - Closes #이슈번호
 
-## Done Checklist (Task 확인용)
+## Done Checklist
 
 - [ ] 이슈의 Done when(완료 조건)을 모두 만족함
 - [ ] 로딩/에러/빈 상태 처리가 필요한 경우 포함됨
