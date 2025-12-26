@@ -1,0 +1,45 @@
+name: FE Bug
+description: 프론트 버그 리포트/수정
+title: "[BUG] "
+labels: ["scope: frontend", "type: fix"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary (한 문장)
+      value: |
+        예) 방 입장하면 로딩이 끝나지 않고 스피너가 계속 돈다.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps (재현 방법)
+      value: |
+        1) /room/room-1 로 진입
+        2) 새로고침(F5)
+        3) 로딩이 계속 유지됨
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected / Actual
+      value: |
+        Expected: 방 헤더가 렌더링되고 내부 UI가 표시된다.
+        Actual: 스피너가 무한 로딩 상태로 유지된다.
+    validations:
+      required: true
+
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when (완료 조건)
+      value: |
+        - [ ] 동일 Steps로 재현이 안 된다
+        - [ ] 원인/수정 내용이 PR에 기록되어 있다
+        - [ ] (가능하면) 재발 방지 가드/로그/테스트 중 1개가 추가되었다
+    validations:
+      required: true

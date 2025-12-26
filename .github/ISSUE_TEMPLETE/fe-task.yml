@@ -1,0 +1,57 @@
+name: FE Task
+description: 프론트 작업 부여(기능/화면/연결/리팩토링)
+title: "[FE] "
+labels: ["scope: frontend"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What (한 문장)
+      description: 무엇을 할지 한 문장으로
+      value: |
+        예) 로그인 모달 UI 구현 + 버튼 클릭 시 onGoogleLogin 콜백이 호출된다.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - feature
+        - refactor
+        - chore
+    validations:
+      required: true
+
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when (완료 조건)
+      description: PR 리뷰 기준. 체크리스트 2~5개만.
+      value: |
+        - [ ] 화면/컴포넌트가 정상 렌더링 된다
+        - [ ] 로딩/에러/빈 상태 중 필요한 것 처리
+        - [ ] 스샷/영상 1개 첨부
+    validations:
+      required: true
+
+  - type: input
+    id: files
+    attributes:
+      label: File hint (선택)
+      description: 어디에 만들지 힌트(1줄)
+      value: |
+        예) src/features/auth/ui/LoginModal.tsx
+    validations:
+      required: false
+
+  - type: input
+    id: ref
+    attributes:
+      label: Link (선택)
+      description: Figma/참고 링크 1줄
+      value: |
+        예) Figma 링크 / API 문서 링크
+    validations:
+      required: false
