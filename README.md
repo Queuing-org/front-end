@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 큐잉 (Queuing)
 
-## Getting Started
+방(ROOM) 기반 음악/신청곡 서비스 (MVP)
 
-First, run the development server:
+## Tech
+
+Next.js(App Router) · TypeScript · CSS Modules · TanStack Query(React Query) · Jotai · Axios
+
+## Run
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Env
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`.env.local`
 
-## Learn More
+```bash
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Structure (요약)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+원칙: `app`은 라우팅/조립, 로직은 `entities`/`features`로 분리
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```txt
+src/
+  app/            # page.tsx (조립)
+  entities/       # 도메인(데이터): types/api/queries/ui
+  features/       # 기능 단위(auth, profile, room-create 등)
+  shared/         # 공통 유틸/컴포넌트
+```
 
-## Deploy on Vercel
+## State Rules
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- 서버 상태(API 데이터): React Query
+- 클라이언트 상태(UI/세션 등): Jotai
+- 변경(Mutation) 후 관련 Query는 invalidate로 최신화
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Collaboration
+
+- 작업은 Issue 단위로 진행
+- PR은 템플릿 기반으로 Summary/Checklist/Attachments/Test 작성
