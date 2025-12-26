@@ -1,6 +1,6 @@
 ## Title (규칙)
 
-예)feat: room header UI
+예) feat: room header UI
 
 ## Summary
 
@@ -10,18 +10,17 @@
 
 - Closes #이슈번호
 
-## Done Checklist
+## Checklist (from Issue)
 
-- [ ] 이슈의 Done when(완료 조건)을 모두 만족함
-- [ ] 로딩/에러/빈 상태 처리가 필요한 경우 포함됨
-- [ ] 콘솔 에러/경고 없음(확인함)
-- [ ] 불필요한 주석/디버그 코드 제거
-- [ ] 파일 위치가 규칙에 맞음(app은 조립, 로직은 features/entities로)
+- 이슈의 `Done when (복붙해서 PR에 체크할 것)`을 아래에 그대로 붙여넣고 체크
+- 체크 방법: `- [ ]` → `- [x]` 또는 GitHub 체크박스 클릭
+
+(여기에 붙여넣기)
 
 ## Attachments (선택)
 
-- 스크린샷/영상/GIF/로그 등, 확인에 도움이 되는 자료가 있으면 첨부
-- (UI 변경이면 가능하면 스크린샷 1장 권장)
+- UI 변경이면 스크린샷/영상 1개 권장
+- 로그/에러/재현 영상 등 확인에 도움 되는 자료 첨부
 
 ## Notes (선택)
 
