@@ -1,3 +1,4 @@
+import { ApiError } from "@/src/shared/api/api-error";
 import { API_BASE_URL } from "@/src/shared/api/config";
 import { User } from "../model/types";
 
@@ -10,7 +11,7 @@ export async function fetchMe(): Promise<User> {
 
   if (!res.ok) {
     const text = await res.text().catch(() => "");
-    throw new Error(`fetchMe failed: ${res.status} ${text}`);
+    throw new ApiError(res.status, text || res.statusText);
   }
 
   return (await res.json()) as User;
