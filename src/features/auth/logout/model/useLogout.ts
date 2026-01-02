@@ -1,14 +1,15 @@
+// features/auth/logout/model/useLogout.ts
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { logout } from "../api/logout";
+import { logoutApi } from "../api/logout";
 
 export function useLogout() {
   const qc = useQueryClient();
 
-  return useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
+  return useMutation<void, Error, void>({
+    mutationFn: () => logoutApi(),
+    onMutate: () => {
       qc.removeQueries({ queryKey: ["me"] });
     },
   });
