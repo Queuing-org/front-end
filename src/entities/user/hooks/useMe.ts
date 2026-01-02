@@ -8,7 +8,7 @@ export function useMe() {
   return useQuery<User>({
     queryKey: ["me"],
     queryFn: fetchMe,
-    staleTime: 1000 * 60,
+    staleTime: 0,
     retry: false,
   });
 }
