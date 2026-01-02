@@ -1,4 +1,3 @@
-// features/user-profile/edit/api/updateMe.ts
 import { ApiError } from "@/src/shared/api/api-error";
 import { API_BASE_URL } from "@/src/shared/api/config";
 import type { User } from "@/src/entities/user/model/types";

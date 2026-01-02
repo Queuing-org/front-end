@@ -22,9 +22,9 @@ export default function OnboardingWizard() {
   const defaultNickname = useMemo(() => draft.nickname ?? "", [draft.nickname]);
 
   const onNicknameNext = (nickname: string) => {
-    setDraft((prev) => ({ ...prev, nickname }));
-
-    submitAll({ ...draft, nickname });
+    const updatedDraft = { ...draft, nickname };
+    setDraft(updatedDraft);
+    submitAll(updatedDraft);
     // 스텝이 늘면 여기서 setStep("avatar") 이런 식으로 이동
   };
 

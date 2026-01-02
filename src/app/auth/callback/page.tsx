@@ -10,11 +10,7 @@ export default function AuthCallbackPage() {
   const sp = useSearchParams();
   const next = sp.get("next") || "/";
 
-  const { data: me, isError, error, refetch, isSuccess } = useMe();
-
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
+  const { data: me, isError, error, isSuccess } = useMe();
 
   useEffect(() => {
     // 초기 사용자 설정 안돼있으면 온보딩 페이지로 이동

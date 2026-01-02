@@ -9,7 +9,7 @@ export function useLogout() {
 
   return useMutation<void, Error, void>({
     mutationFn: () => logoutApi(),
-    onMutate: () => {
+    onSuccess: () => {
       qc.removeQueries({ queryKey: ["me"] });
     },
   });
