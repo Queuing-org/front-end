@@ -3,6 +3,15 @@
 import { useState } from "react";
 import { useUpdateMe } from "../hooks/useUpdateMe";
 
+/**
+ * Form component that lets the user enter and submit a new nickname.
+ *
+ * The input value is trimmed before submission; if the trimmed value is empty the submission is aborted.
+ * While an update is in progress the input and submit button are disabled and the button text indicates progress.
+ * If an update error occurs, a brief error message is displayed.
+ *
+ * @returns A JSX element rendering the nickname edit form
+ */
 export default function NicknameEditForm() {
   const { mutate, isPending, error } = useUpdateMe();
   const [nickname, setNickname] = useState("");

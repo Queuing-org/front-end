@@ -8,6 +8,14 @@ type Props = {
   onNext: (nickname: string) => void;
 };
 
+/**
+ * Render a nickname input form that advances to the next step when a non-empty trimmed nickname is submitted.
+ *
+ * @param defaultValue - Initial nickname shown in the input.
+ * @param submitting - When true, disables the input and submit button.
+ * @param onNext - Callback invoked with the trimmed nickname after successful submission.
+ * @returns The form element used to capture and submit a nickname.
+ */
 export default function NicknameStep({
   defaultValue = "",
   submitting = false,

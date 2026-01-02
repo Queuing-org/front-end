@@ -6,7 +6,13 @@ import type { OnboardingPayload } from "@/src/entities/user/model/types";
 import { useCompleteOnboarding } from "@/src/entities/user/hooks/useCompleteOnboarding";
 import NicknameStep from "./steps/NicknameStep";
 
-type Step = "nickname"; //"avatar" | "genre" | "favoriteSong"
+type Step = "nickname"; /**
+ * Renders a multi-step onboarding wizard and handles nickname collection, submission, and navigation after completion.
+ *
+ * Renders the nickname step, updates a draft payload with the provided nickname, submits the payload via the onboarding mutation, and replaces the current route with the `next` query parameter on successful completion.
+ *
+ * @returns The onboarding wizard React element.
+ */
 
 export default function OnboardingWizard() {
   const router = useRouter();

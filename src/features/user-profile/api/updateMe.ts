@@ -4,6 +4,13 @@ import { API_BASE_URL } from "@/src/shared/api/config";
 import type { User } from "@/src/entities/user/model/types";
 import { UpdateMePayload } from "../model/types";
 
+/**
+ * Updates the current user's profile with the provided fields.
+ *
+ * @param payload - Fields to apply to the current user's profile
+ * @returns The updated `User` object
+ * @throws ApiError when the HTTP response is not OK; contains the response status and message
+ */
 export async function updateMe(payload: UpdateMePayload): Promise<User> {
   const res = await fetch(`${API_BASE_URL}/api/v1/user-profiles/me`, {
     method: "PATCH",
