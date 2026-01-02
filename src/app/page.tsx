@@ -1,5 +1,8 @@
+"use client";
+
 import { redirect } from "next/navigation";
 
 export default function Page() {
-  redirect("/home");
+  // redirect("/home");
+  return <button onClick={() => redirect("/test")}>go to test page</button>;
 }

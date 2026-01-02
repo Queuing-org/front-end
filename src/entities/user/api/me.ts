@@ -1,18 +1,12 @@
-import { ApiError } from "@/src/shared/api/api-error";
-import { API_BASE_URL } from "@/src/shared/api/config";
-import { User } from "../model/types";
+// src/entities/user/api/me.ts
+import { axiosInstance } from "@/src/shared/api/axiosInstance";
+import type { User } from "../model/types";
+
+type ApiResponse<T> = { result: T };
 
 export async function fetchMe(): Promise<User> {
-  const res = await fetch(`${API_BASE_URL}/api/v1/user-profiles/me`, {
-    method: "GET",
-    credentials: "include",
-    headers: { Accept: "application/json" },
-  });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    throw new ApiError(res.status, text || res.statusText);
-  }
-
-  return (await res.json()) as User;
+  const { data } = await axiosInstance.get<ApiResponse<User>>(
+    "/api/v1/user-profiles/me"
+  );
+  return data.result;
 }
