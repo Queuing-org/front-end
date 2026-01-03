@@ -28,7 +28,11 @@ export default function NicknameEditForm() {
         disabled={isPending}
       />
 
-      <button type="submit" className="border px-3 py-1" disabled={isPending}>
+      <button
+        type="submit"
+        className="border px-3 py-1 cursor-pointer"
+        disabled={isPending}
+      >
         {isPending ? "변경 중..." : "변경하기"}
       </button>
 

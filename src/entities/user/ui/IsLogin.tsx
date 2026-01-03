@@ -4,11 +4,11 @@ export default function IsLogin() {
   const { data: me, isError, error, isLoading } = useMe();
 
   return (
-    <div className="border p-3 text-black">
+    <div className=" text-black">
       {isLoading && <div>me 로딩중...</div>}
 
       {isError && (
-        <div>
+        <div className="text-sm text-red-600">
           me 실패: ({error.status}) {error.message}
         </div>
       )}
