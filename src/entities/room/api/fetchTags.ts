@@ -7,5 +7,6 @@ export async function fetchRoomTags(): Promise<RoomTag[]> {
   const res = await axiosInstance.get<ApiResponse<{ tags: RoomTag[] }>>(
     "/api/v1/tags"
   );
+
   return res.data.result.tags;
 }

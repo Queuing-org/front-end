@@ -15,11 +15,27 @@ axiosInstance.interceptors.response.use(
   (res) => res,
   (err) => {
     const status = err?.response?.status ?? 0;
+
+    const backendError = err?.response?.data?.error;
+    const backendStatus = backendError?.statusCode;
+    const backendCode = backendError?.code;
+    const backendMessage = backendError?.message;
+
     const message =
+      backendMessage ??
       err?.response?.data?.message ??
       err?.response?.data ??
       err?.message ??
       "Unknown error";
-    return Promise.reject(new ApiError(status, String(message)));
+
+    const finalStatus = backendStatus ?? status;
+
+    return Promise.reject(
+      new ApiError({
+        status: finalStatus,
+        message: String(message),
+        code: backendCode,
+      })
+    );
   }
 );
