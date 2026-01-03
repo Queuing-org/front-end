@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev -H local.queuing.patulus.com -p 3000",
+    "dev": "next dev -H local.queuing.patulus.com -p 3000 --experimental-https --experimental-https-key ./certificates/local-key.pem --experimental-https-cert ./certificates/local.pem",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
