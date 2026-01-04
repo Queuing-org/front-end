@@ -21,18 +21,26 @@ export default function NicknameEditForm() {
       <label className="block text-sm">변경할 닉네임 입력</label>
 
       <input
-        className="border px-2 py-1"
+        className="border px-2 py-1 text-black"
         value={nickname}
         onChange={(e) => setNickname(e.target.value)}
         placeholder="새 닉네임"
         disabled={isPending}
       />
 
-      <button type="submit" className="border px-3 py-1" disabled={isPending}>
+      <button
+        type="submit"
+        className="border px-3 py-1 cursor-pointer"
+        disabled={isPending}
+      >
         {isPending ? "변경 중..." : "변경하기"}
       </button>
 
-      {error && <p className="text-sm text-red-600">변경 실패</p>}
+      {error && (
+        <p className="text-sm text-red-600">
+          닉네임 변경: ({error.status}) {error.message}
+        </p>
+      )}
     </form>
   );
 }

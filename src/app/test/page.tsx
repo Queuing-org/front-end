@@ -1,14 +1,15 @@
 "use client";
 
 import GoogleLoginButton from "@/src/features/auth/login-with-google/ui/googleLoginButton";
-import { useMe } from "@/src/entities/user/hooks/useMe";
 import LogoutButton from "@/src/features/auth/logout/ui/logoutButton";
 import NicknameEditForm from "@/src/features/user-profile/ui/NicknameEditForm";
 import { useRouter } from "next/navigation";
+import IsLogin from "@/src/entities/user/ui/IsLogin";
+import RoomTags from "@/src/entities/room/ui/RoomTags";
+import CreateRoomTest from "@/src/features/room/create/ui/CreateRoomTest";
+import RoomsListTest from "@/src/entities/room/ui/RoomListTest";
 
 export default function TestPage() {
-  const { data: me, isError, error } = useMe();
-
   const router = useRouter();
 
   return (
@@ -16,13 +17,17 @@ export default function TestPage() {
       <GoogleLoginButton />
       <LogoutButton />
       <NicknameEditForm />
+      <IsLogin />
+      <RoomTags />
+      <CreateRoomTest />
+      <RoomsListTest />
 
-      <div className="border p-3">
-        {isError && <div>me 실패: {String((error as Error)?.message)}</div>}
-        {me && <pre>{JSON.stringify(me, null, 2)}</pre>}
-        {me === null && <div>로그인 필요</div>}
-      </div>
-      <button onClick={() => router.push("/home")}>go to home page</button>
+      <button
+        onClick={() => router.push("/home")}
+        className="border cursor-pointer"
+      >
+        go to home page
+      </button>
     </div>
   );
 }
