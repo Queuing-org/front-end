@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateMe } from "../api/updateMe";
 import type { UpdateMePayload } from "../model/types";
 import type { ApiError } from "@/src/shared/api/api-error";
-import type { User } from "@/src/entities/user/model/types"; // 너 프로젝트 User 타입 경로에 맞게
+import type { User } from "@/src/entities/user/model/types";
 
 export function useUpdateMe() {
   const qc = useQueryClient();
