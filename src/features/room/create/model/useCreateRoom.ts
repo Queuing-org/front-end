@@ -3,16 +3,21 @@
 import { createRoom } from "@/src/entities/room/api/createRoom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ApiError } from "@/src/shared/api/api-error";
-import type { CreateRoomPayload } from "@/src/entities/room/api/types";
+import type {
+  CreateRoomPayload,
+  CreateRoomResult,
+} from "@/src/entities/room/api/types";
+import { useRouter } from "next/navigation";
 
 export function useCreateRoom() {
   const qc = useQueryClient();
+  const router = useRouter();
 
-  return useMutation<boolean, ApiError, CreateRoomPayload>({
+  return useMutation<CreateRoomResult, ApiError, CreateRoomPayload>({
     mutationFn: createRoom,
-    onSuccess: async () => {
+    onSuccess: async (result) => {
       await qc.invalidateQueries({ queryKey: ["rooms"] });
-      // TODO: room으로 이동
+      router.push(`/room/${result.slug}`);
     },
   });
 }

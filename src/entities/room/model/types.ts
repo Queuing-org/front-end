@@ -8,7 +8,7 @@ export type Room = {
   slug: string;
   title: string;
   isPrivate: boolean;
-  createAt: string;
+  createdAt: string;
   tags: RoomTag[];
 };
 

@@ -1,5 +1,6 @@
 "use client";
 
+import JoinRoomButton from "@/src/features/room/join/JoinRoomButton";
 import { useRoomsQuery } from "../hooks/useFetchRooms";
 
 export default function RoomsListTest() {
@@ -44,6 +45,7 @@ export default function RoomsListTest() {
                   <span className="text-gray-600">없음</span>
                 )}
               </div>
+              <JoinRoomButton slug={room.slug} />
             </li>
           ))}
         </ul>

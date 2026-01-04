@@ -1,7 +1,6 @@
 import { axiosInstance } from "@/src/shared/api/axiosInstance";
 import type { RoomTag } from "../model/types";
-
-type ApiResponse<T> = { result: T };
+import { ApiResponse } from "@/src/shared/api/types";
 
 export async function fetchRoomTags(): Promise<RoomTag[]> {
   const res = await axiosInstance.get<ApiResponse<{ tags: RoomTag[] }>>(

@@ -3,3 +3,7 @@ export type CreateRoomPayload = {
   password?: string;
   tags?: string[];
 };
+
+export type CreateRoomResult = {
+  slug: string;
+};
