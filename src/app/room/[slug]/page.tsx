@@ -1,9 +1,9 @@
-"use client";
+type Props = {
+  params: Promise<{ slug: string }>;
+};
 
-import { useParams } from "next/navigation";
+export default async function RoomPage({ params }: Props) {
+  const { slug } = await params;
 
-export default function RoomPage() {
-  const params = useParams<{ slug: string }>();
-
-  return <div>room: {params.slug}</div>;
+  return <div>room: {slug}</div>;
 }
