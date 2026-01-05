@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { useUpdateMe } from "../hooks/useUpdateMe";
+import CheckNicknameButton from "@/src/features/user-profile/ui/CheckNicknameButton";
 
 export default function NicknameEditForm() {
   const { mutate, isPending, error } = useUpdateMe();
   const [nickname, setNickname] = useState("");
+  const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +29,15 @@ export default function NicknameEditForm() {
         placeholder="새 닉네임"
         disabled={isPending}
       />
+
+      <CheckNicknameButton nickname={nickname} onResult={setIsAvailable} />
+
+      {isAvailable === true && (
+        <p className="text-sm text-green-600">변경 가능</p>
+      )}
+      {isAvailable === false && (
+        <p className="text-sm text-red-600">닉네임 중복됨</p>
+      )}
 
       <button
         type="submit"
