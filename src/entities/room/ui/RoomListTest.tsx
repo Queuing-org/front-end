@@ -2,6 +2,7 @@
 
 import JoinRoomButton from "@/src/features/room/join/JoinRoomButton";
 import { useRoomsQuery } from "../hooks/useFetchRooms";
+import DeleteRoomButton from "@/src/features/room/delete/ui/DeleteRoomButton";
 
 export default function RoomsListTest() {
   const { data, isLoading, isError, error } = useRoomsQuery();
@@ -46,6 +47,7 @@ export default function RoomsListTest() {
                 )}
               </div>
               <JoinRoomButton slug={room.slug} />
+              <DeleteRoomButton slug={room.slug} />
             </li>
           ))}
         </ul>
