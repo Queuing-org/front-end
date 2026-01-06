@@ -5,9 +5,9 @@ import LogoutButton from "@/src/features/auth/logout/ui/logoutButton";
 import NicknameEditForm from "@/src/features/user-profile/ui/NicknameEditForm";
 import { useRouter } from "next/navigation";
 import IsLogin from "@/src/entities/user/ui/IsLogin";
-import RoomTags from "@/src/entities/room/ui/RoomTags";
 import CreateRoomTest from "@/src/features/room/create/ui/CreateRoomTest";
-import RoomsListTest from "@/src/entities/room/ui/RoomListTest";
+import FriendsList from "@/src/features/friend/ui/FriendsList";
+import RoomsListTest from "@/src/features/room/list/ui/RoomListTest";
 
 export default function TestPage() {
   const router = useRouter();
@@ -18,9 +18,15 @@ export default function TestPage() {
       <LogoutButton />
       <NicknameEditForm />
       <IsLogin />
-      <RoomTags />
       <CreateRoomTest />
-      <RoomsListTest />
+      <div className="flex gap-4">
+        <div className="flex-1">
+          <RoomsListTest />
+        </div>
+        <div className="flex-1">
+          <FriendsList />
+        </div>
+      </div>
 
       <button
         onClick={() => router.push("/home")}
